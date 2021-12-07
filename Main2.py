@@ -114,7 +114,7 @@ class Game:
         if self.analysis[8] != None:
             self.text += "You can approach a wizard, but be cautious... "
             self.actions.append("[approach]")
-        self.actions.extend(("[view]", "[quit]"))
+        self.actions.extend(("[view]", "[save]", "[quit]"))
         if show_room_info:
             self.write_text(self.text, colour=green)
         self.choice = ""
@@ -560,6 +560,42 @@ class Game:
                             json_object = json.dumps(json_dictionary, indent = 4)
                             file.write(json_object)
                         p.quit()
+
+            elif "save" in self.choice:
+                self.write_text("Progress has been saved!", colour=yellow)
+                with open("saved data.json", "w") as file:
+                    json_dictionary = {"self.current_room" : self.current_room,
+                                        "tilemap_room1" : tilemap_room1,
+                                        "tilemap_room2" : tilemap_room2,
+                                        "tilemap_room3" : tilemap_room3,
+                                        "tilemap_room4" : tilemap_room4,
+                                        "tilemap_room5" : tilemap_room5,
+                                        "tilemap_room6" : tilemap_room6,
+                                        "tilemap_room7" : tilemap_room7,
+                                        "tilemap_room8" : tilemap_room8,
+                                        "tilemap_room9" : tilemap_room9,
+                                        "tilemap_room10" : tilemap_room10,
+                                        "tilemap_room11" : tilemap_room11,
+                                        "tilemap_room12" : tilemap_room12,
+                                        "tilemap_room13" : tilemap_room13,
+                                        "tilemap_room14" : tilemap_room14,
+                                        "tilemap_room15" : tilemap_room15,
+                                        "tilemap_room16" : tilemap_room16,
+                                        "tilemap_room17" : tilemap_room17,
+                                        "tilemap_room18" : tilemap_room18,
+                                        "tilemap_room19" : tilemap_room19,
+                                        "tilemap_room20" : tilemap_room20,
+                                        "tilemap_room21" : tilemap_room21,
+                                        "tilemap_room22" : tilemap_room22,
+                                        "tilemap_room23" : tilemap_room23,
+                                        "tilemap_room24" : tilemap_room24,
+                                        "self.player_sprite.rect.x" : self.player_sprite.rect.x,
+                                        "self.player_sprite.rect.y" : self.player_sprite.rect.y,
+                                        "self.player_inventory" : self.player_inventory,
+                                        "self.player_health" : self.player_health,
+                                        "self.player_gold" : self.player_gold}
+                    json_object = json.dumps(json_dictionary, indent = 4)
+                    file.write(json_object)
             elif "die" in self.choice:
                 self.damage_player(self.player_health)
 
@@ -1348,6 +1384,7 @@ class Game:
             scrambled.append(letter)
         return "".join(scrambled)
 
+    #game complete function onces player has escaped dungeon
     def game_complete(self):
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*3), int(display_width/5), int(display_height/10), blue, cyan)
 
