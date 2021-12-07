@@ -8,8 +8,6 @@ from time import sleep
 from itertools import permutations
 import json
 
-print(check_if_user_exists("test", "test123"))
-
 #---------------------------------Game Class---------------------------------
 class Game:
     #game class constructor
@@ -907,6 +905,8 @@ class Game:
 
         play_button = Button("Start", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
         load_button = Button("Load", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*3), int(display_width/5), int(display_height/10), blue, cyan)
+        login_button = Button("Login", self.font_name, 30, black, int((display_width/5)*1.2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        register_button = Button("Register", self.font_name, 30, black, int((display_width/5)*2.8), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
 
         while self.intro:
             for event in p.event.get():
@@ -1010,11 +1010,23 @@ class Game:
                 except JSONDecodeError:
                     pass
 
+            if login_button.is_pressed(mouse_pos, mouse_pressed):
+                pass
+
+            if register_button.is_pressed(mouse_pos, mouse_pressed):
+                pass
 
             self.screen.fill(yellow)
             self.draw_text(title, 100, black, int(display_width/2), int(display_height/5))
             play_button.load()
-            load_button.load()
+            if self.player_name:
+                load_button.load()
+            else:
+                self.draw_text("Have an account? Login in to load saved progress or", 24, black, int((display_width/2)), int((display_height/5)*3))
+                self.draw_text("register to unlock save feature", 24, black, int((display_width/2)), int((display_height/5)*3.2))
+                login_button.load()
+                register_button.load()
+            #load_button.load()
             
             p.display.update()
             self.clock.tick(FPS)
