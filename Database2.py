@@ -24,3 +24,20 @@ def add_details_to_database(username, password):
     sql = "INSERT INTO Users(username, password) VALUES (?, ?)"
     cur.execute(sql, (username,password))
     conn.commit()
+
+def add_user_score_to_database(username, gold, time):
+    sql = "INSERT INTO Scores(userID, gold, timeTaken) VALUES ((SELECT userID FROM Users WHERE username = '?'), ?, ?)"
+    cur.execute(sql, (username, gold, time))
+    conn.commit()
+
+def get_all_highscores_by_gold():
+    sql = "SELECT U.username, S.gold, S.timeTaken FROM Scores AS S JOIN Users AS U ON S.userID = U.userID ORDER BY S.gold DESC"
+    cur.execute(sql)
+    row = cur.fetchall()
+    return row
+
+def get_all_highscores_by_time():
+    sql = "SELECT U.username, S.gold, S.timeTaken FROM Scores AS S JOIN Users AS U ON S.userID = U.userID ORDER BY S.timeTaken ASC"
+    cur.execute(sql)
+    row = cur.fetchall()
+    return row

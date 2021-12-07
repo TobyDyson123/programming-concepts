@@ -1,6 +1,7 @@
 from json.decoder import JSONDecodeError
 from json.encoder import JSONEncoder
 import pygame as p
+import time
 from math import ceil
 from Settings2 import *
 from Sprites2 import *
@@ -1411,6 +1412,18 @@ class Game:
     def game_complete(self):
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
 
+        end_time = time.time()
+        elapsed_time = int(end_time - start_time)
+        time_taken = ""
+        minutes = elapsed_time//60
+        minutes_remainder = elapsed_time%60
+        seconds = minutes_remainder
+        if minutes > 0:
+            time_taken += str(minutes) + " minutes, "
+        time_taken += str(seconds) + " seconds"
+
+        add_user_score_to_database(self.player_name, self.player_gold, elapsed_time)
+
         for sprite in self.all_sprites:
             sprite.kill()
 
@@ -1427,8 +1440,17 @@ class Game:
                 p.quit()
 
             self.screen.fill(lime)
-            self.draw_text("You have escaped with " + str(self.player_gold) + " gold!", 45, black, int(display_width/2), int(display_height/5))
+
+            self.draw_text("You have escaped with " + str(self.player_gold) + " gold in", 45, black, int(display_width/2), int((display_height/5)*0.5))
+            self.draw_text(time_taken, 40, black, int(display_width/2), int((display_height/5)))
+
+            self.draw_text("Highscores:", 35, black, int(display_width/4), int((display_height/5)*(1.5 + 0.35)))
+            highscores = get_all_highscores_by_gold()
+            for i, entry in enumerate(highscores):
+                self.draw_text(str(entry[0]) + " " + str(entry[1]) + " " + str(entry[2]), 35, black, int(display_width/2), int((display_height/5)*(1.5 + 0.35 * (1 + i))))
+           
             exit_button.load()
+            
             self.clock.tick(FPS)
             p.display.update()
 
@@ -1573,6 +1595,7 @@ class Game:
                             if return_button.is_pressed(mouse_pos, mouse_pressed):
                                 found = False
                                 self.login = False
+                                self.intro_screen()
                             p.display.update()
                     else:
                         self.incorrect_flag = True
@@ -1738,6 +1761,7 @@ class Game:
                                 if return_button.is_pressed(mouse_pos, mouse_pressed):
                                     registered = False
                                     self.register = False
+                                    self.intro_screen()
                                 p.display.update()
                     else:
                         self.exists_flag = True
@@ -1766,6 +1790,9 @@ class Game:
 g = Game()
 g.intro_screen()
 #g.instructions_screen()
+global start_time
+global end_time
+start_time = time.time()
 g.new(rooms[starting_room])
 while g.active:
     g.run()
