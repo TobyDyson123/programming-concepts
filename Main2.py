@@ -525,78 +525,50 @@ class Game:
                             self.write_text("Your inventory contains " + ", ".join(["x" + str(value) + " " + key for key, value in self.player_inventory.items()]) + ".", colour=yellow)
             elif "quit" in self.choice:
                 if "[quit]" in self.actions:
-                    self.choice = self.write_text("Are you sure you want to end the game? All progress will be saved.", True, colour=cyan)
-                    if "yes" in self.choice:
-                        with open("saved data.json", "w") as file:
-                            json_dictionary = {"self.current_room" : self.current_room,
-                                                "tilemap_room1" : tilemap_room1,
-                                                "tilemap_room2" : tilemap_room2,
-                                                "tilemap_room3" : tilemap_room3,
-                                                "tilemap_room4" : tilemap_room4,
-                                                "tilemap_room5" : tilemap_room5,
-                                                "tilemap_room6" : tilemap_room6,
-                                                "tilemap_room7" : tilemap_room7,
-                                                "tilemap_room8" : tilemap_room8,
-                                                "tilemap_room9" : tilemap_room9,
-                                                "tilemap_room10" : tilemap_room10,
-                                                "tilemap_room11" : tilemap_room11,
-                                                "tilemap_room12" : tilemap_room12,
-                                                "tilemap_room13" : tilemap_room13,
-                                                "tilemap_room14" : tilemap_room14,
-                                                "tilemap_room15" : tilemap_room15,
-                                                "tilemap_room16" : tilemap_room16,
-                                                "tilemap_room17" : tilemap_room17,
-                                                "tilemap_room18" : tilemap_room18,
-                                                "tilemap_room19" : tilemap_room19,
-                                                "tilemap_room20" : tilemap_room20,
-                                                "tilemap_room21" : tilemap_room21,
-                                                "tilemap_room22" : tilemap_room22,
-                                                "tilemap_room23" : tilemap_room23,
-                                                "tilemap_room24" : tilemap_room24,
-                                                "self.player_sprite.rect.x" : self.player_sprite.rect.x,
-                                                "self.player_sprite.rect.y" : self.player_sprite.rect.y,
-                                                "self.player_inventory" : self.player_inventory,
-                                                "self.player_health" : self.player_health,
-                                                "self.player_gold" : self.player_gold}
-                            json_object = json.dumps(json_dictionary, indent = 4)
-                            file.write(json_object)
+                    self.choice = self.write_text("Are you sure you want to end the game?", True, colour=cyan)
+                    if self.choice.strip() == "yes":
                         p.quit()
+                    else:
+                        self.write_text("Game end aborted",colour=yellow)
 
             elif "save" in self.choice:
-                self.write_text("Progress has been saved!", colour=yellow)
-                with open("saved data.json", "w") as file:
-                    json_dictionary = {"self.current_room" : self.current_room,
-                                        "tilemap_room1" : tilemap_room1,
-                                        "tilemap_room2" : tilemap_room2,
-                                        "tilemap_room3" : tilemap_room3,
-                                        "tilemap_room4" : tilemap_room4,
-                                        "tilemap_room5" : tilemap_room5,
-                                        "tilemap_room6" : tilemap_room6,
-                                        "tilemap_room7" : tilemap_room7,
-                                        "tilemap_room8" : tilemap_room8,
-                                        "tilemap_room9" : tilemap_room9,
-                                        "tilemap_room10" : tilemap_room10,
-                                        "tilemap_room11" : tilemap_room11,
-                                        "tilemap_room12" : tilemap_room12,
-                                        "tilemap_room13" : tilemap_room13,
-                                        "tilemap_room14" : tilemap_room14,
-                                        "tilemap_room15" : tilemap_room15,
-                                        "tilemap_room16" : tilemap_room16,
-                                        "tilemap_room17" : tilemap_room17,
-                                        "tilemap_room18" : tilemap_room18,
-                                        "tilemap_room19" : tilemap_room19,
-                                        "tilemap_room20" : tilemap_room20,
-                                        "tilemap_room21" : tilemap_room21,
-                                        "tilemap_room22" : tilemap_room22,
-                                        "tilemap_room23" : tilemap_room23,
-                                        "tilemap_room24" : tilemap_room24,
-                                        "self.player_sprite.rect.x" : self.player_sprite.rect.x,
-                                        "self.player_sprite.rect.y" : self.player_sprite.rect.y,
-                                        "self.player_inventory" : self.player_inventory,
-                                        "self.player_health" : self.player_health,
-                                        "self.player_gold" : self.player_gold}
-                    json_object = json.dumps(json_dictionary, indent = 4)
-                    file.write(json_object)
+                if self.player_name:
+                    self.write_text("Progress has been saved!", colour=yellow)
+                    with open("saved data.json", "w") as file:
+                        json_dictionary = {"self.current_room" : self.current_room,
+                                            "tilemap_room1" : tilemap_room1,
+                                            "tilemap_room2" : tilemap_room2,
+                                            "tilemap_room3" : tilemap_room3,
+                                            "tilemap_room4" : tilemap_room4,
+                                            "tilemap_room5" : tilemap_room5,
+                                            "tilemap_room6" : tilemap_room6,
+                                            "tilemap_room7" : tilemap_room7,
+                                            "tilemap_room8" : tilemap_room8,
+                                            "tilemap_room9" : tilemap_room9,
+                                            "tilemap_room10" : tilemap_room10,
+                                            "tilemap_room11" : tilemap_room11,
+                                            "tilemap_room12" : tilemap_room12,
+                                            "tilemap_room13" : tilemap_room13,
+                                            "tilemap_room14" : tilemap_room14,
+                                            "tilemap_room15" : tilemap_room15,
+                                            "tilemap_room16" : tilemap_room16,
+                                            "tilemap_room17" : tilemap_room17,
+                                            "tilemap_room18" : tilemap_room18,
+                                            "tilemap_room19" : tilemap_room19,
+                                            "tilemap_room20" : tilemap_room20,
+                                            "tilemap_room21" : tilemap_room21,
+                                            "tilemap_room22" : tilemap_room22,
+                                            "tilemap_room23" : tilemap_room23,
+                                            "tilemap_room24" : tilemap_room24,
+                                            "self.player_sprite.rect.x" : self.player_sprite.rect.x,
+                                            "self.player_sprite.rect.y" : self.player_sprite.rect.y,
+                                            "self.player_inventory" : self.player_inventory,
+                                            "self.player_health" : self.player_health,
+                                            "self.player_gold" : self.player_gold}
+                        json_object = json.dumps(json_dictionary, indent = 4)
+                        file.write(json_object)
+                else:
+                    self.write_text("Unable to save as not logged in!", colour=red)
             elif "die" in self.choice:
                 self.damage_player(self.player_health)
 
@@ -1561,6 +1533,7 @@ class Game:
                                     self.active = False
                                     p.quit()
 
+                            self.draw_text("Logged in as " + self.player_name, 50, black, int(display_width/2), int((display_height/5)*1.5))
                             return_button.load()
                             
                             mouse_pos = p.mouse.get_pos()
