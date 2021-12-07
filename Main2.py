@@ -1349,7 +1349,7 @@ class Game:
         return "".join(scrambled)
 
     def game_complete(self):
-        exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*3), int(display_width/5), int(display_height/10), blue, cyan)
 
         for sprite in self.all_sprites:
             sprite.kill()
