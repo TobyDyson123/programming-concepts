@@ -914,6 +914,7 @@ class Game:
                     self.intro = False
                     self.playing = False
                     self.active = False
+                    p.quit()
 
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
@@ -1011,7 +1012,7 @@ class Game:
                     pass
 
             if login_button.is_pressed(mouse_pos, mouse_pressed):
-                pass
+                self.login_screen()
 
             if register_button.is_pressed(mouse_pos, mouse_pressed):
                 pass
@@ -1424,6 +1425,77 @@ class Game:
             self.clock.tick(FPS)
             p.display.update()
 
+    #login screen function if user is logging into an account
+    def login_screen(self):
+        self.login = True
+        self.typing = False
+        self.input_text = ""
+
+        username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*2), int((display_width/5)*3), int(display_height/10), blue, cyan)
+
+        while self.login:
+            self.screen.fill(yellow)
+            for event in p.event.get():
+                if event.type == p.QUIT:
+                    self.login = False
+                    self.intro = False
+                    self.playing = False
+                    self.active = False
+                    p.quit()
+                if event.type == p.KEYDOWN:
+                    if self.typing:
+                        if event.key == p.K_RETURN:
+                            self.input_text = username_button.msg
+                        elif event.key == p.K_BACKSPACE:
+                            if not username_button.msg:
+                                pass
+                            else:
+                                username_button.msg = username_button.msg[:-1]
+                        elif event.key == p.K_SPACE:
+                            username_button.msg += " "
+                        else:
+                            if len(p.key.name(event.key)) == 1:
+                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
+                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
+                                    username_button.msg += str(p.key.name(event.key))
+
+            mouse_pos = p.mouse.get_pos()
+            mouse_pressed = p.mouse.get_pressed()
+
+            if not username_button.rect.collidepoint(mouse_pos):
+                if mouse_pressed[0]:
+                    self.typing = False
+
+            if username_button.is_pressed(mouse_pos, mouse_pressed):
+                self.typing = True
+
+            if not self.typing and not username_button.msg:
+                username_button.text_colour = lightgrey
+                username_button.msg = "Click to type your username"
+
+            if self.typing:
+                if username_button.msg == "Click to type your username":
+                    username_button.msg = ""
+                    username_button.text_colour = black
+                username_button.image.fill(username_button.active_colour)
+
+            username_button.load()
+
+            if self.input_text:
+                pass
+
+            if self.input_text:
+                self.purchasing_text1 = "Unrecognised answer. Try including 'buy'"
+                self.purchasing_text2 = "or 'leave' if you want to leave"
+                username_button.msg = ""
+                self.input_text = ""
+                self.typing = False 
+
+            p.display.update()
+
+    #register screen function if user is registering an account
+    def register_screen(self):
+        pass
 
 #---------------------------------Game Loop---------------------------------
 g = Game()

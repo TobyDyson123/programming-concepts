@@ -1,10 +1,10 @@
 {
-    "self.current_room": 20,
+    "self.current_room": 13,
     "tilemap_room1": [
         "BBBBBBBBBBBBBB*BBBBB",
         "B..................B",
-        "B...C..............B",
-        "B....P.............B",
+        "B..................B",
+        "B.............P....B",
         "B..................B",
         "B..................B",
         "B..................B",
@@ -15,11 +15,11 @@
     "tilemap_room2": [
         "BBBBBBBBBBBBBB=BBBBB",
         "B..................B",
-        "B......N...........B",
-        "|..................B",
         "B..................B",
-        "B...............W..B",
-        "B....P.............-",
+        "*....P.............B",
+        "B..................B",
+        "B..................B",
+        "B..................-",
         "B..................B",
         "B..................B",
         "BBBBB*BBBBBBBBBBBBBB"
@@ -43,8 +43,8 @@
         "*..................B",
         "B..................B",
         "B..................B",
-        "B.............P....*",
-        "B..W...............B",
+        "B....P.............*",
+        "B..................B",
         "B..................B",
         "BBBBBBBBBBBBBBBBBBBB"
     ],
@@ -289,8 +289,10 @@
         "BBBBBBBBBBBBBBBBBBBB"
     ],
     "self.player_sprite.rect.x": 160,
-    "self.player_sprite.rect.y": 96,
-    "self.player_inventory": {},
+    "self.player_sprite.rect.y": 192,
+    "self.player_inventory": {
+        "Green Key": 1
+    },
     "self.player_health": 50,
-    "self.player_gold": 0
+    "self.player_gold": 48
 }
