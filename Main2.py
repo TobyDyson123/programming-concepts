@@ -1428,10 +1428,13 @@ class Game:
     #login screen function if user is logging into an account
     def login_screen(self):
         self.login = True
-        self.typing = False
-        self.input_text = ""
+        self.typing_username = False
+        self.typing_password = False
+        self.input_text_username = ""
+        self.input_text_password = ""
 
         username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*2), int((display_width/5)*3), int(display_height/10), blue, cyan)
+        password_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*3), int((display_width/5)*3), int(display_height/10), blue, cyan)
 
         while self.login:
             self.screen.fill(yellow)
@@ -1443,9 +1446,9 @@ class Game:
                     self.active = False
                     p.quit()
                 if event.type == p.KEYDOWN:
-                    if self.typing:
+                    if self.typing_username:
                         if event.key == p.K_RETURN:
-                            self.input_text = username_button.msg
+                            self.input_text_username = username_button.msg
                         elif event.key == p.K_BACKSPACE:
                             if not username_button.msg:
                                 pass
@@ -1458,38 +1461,74 @@ class Game:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
                                     username_button.msg += str(p.key.name(event.key))
+                    if self.typing_password:
+                        if event.key == p.K_RETURN:
+                            self.input_text_password = password_button.msg
+                        elif event.key == p.K_BACKSPACE:
+                            if not password_button.msg:
+                                pass
+                            else:
+                                password_button.msg = password_button.msg[:-1]
+                        elif event.key == p.K_SPACE:
+                            password_button.msg += " "
+                        else:
+                            if len(p.key.name(event.key)) == 1:
+                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
+                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
+                                    password_button.msg += str(p.key.name(event.key))
 
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
 
             if not username_button.rect.collidepoint(mouse_pos):
                 if mouse_pressed[0]:
-                    self.typing = False
+                    self.typing_username = False
 
             if username_button.is_pressed(mouse_pos, mouse_pressed):
-                self.typing = True
+                self.typing_username = True
 
-            if not self.typing and not username_button.msg:
+            if not self.typing_username and not username_button.msg:
                 username_button.text_colour = lightgrey
                 username_button.msg = "Click to type your username"
 
-            if self.typing:
+            if self.typing_username:
                 if username_button.msg == "Click to type your username":
                     username_button.msg = ""
                     username_button.text_colour = black
                 username_button.image.fill(username_button.active_colour)
 
-            username_button.load()
+            if not password_button.rect.collidepoint(mouse_pos):
+                if mouse_pressed[0]:
+                    self.typing_password = False
 
-            if self.input_text:
+            if password_button.is_pressed(mouse_pos, mouse_pressed):
+                self.typing_password = True
+
+            if not self.typing_password and not password_button.msg:
+                password_button.text_colour = lightgrey
+                password_button.msg = "Click to type your password"
+
+            if self.typing_password:
+                if password_button.msg == "Click to type your password":
+                    password_button.msg = ""
+                    password_button.text_colour = black
+                password_button.image.fill(password_button.active_colour)
+
+            username_button.load()
+            password_button.load()
+
+            if self.input_text_username:
                 pass
 
-            if self.input_text:
-                self.purchasing_text1 = "Unrecognised answer. Try including 'buy'"
-                self.purchasing_text2 = "or 'leave' if you want to leave"
+            if self.input_text_username:
                 username_button.msg = ""
-                self.input_text = ""
-                self.typing = False 
+                self.input_text_username = ""
+                self.typing_username = False 
+
+            if self.input_text_password:
+                password_button.msg = ""
+                self.input_text_password = ""
+                self.typing_password = False
 
             p.display.update()
 
