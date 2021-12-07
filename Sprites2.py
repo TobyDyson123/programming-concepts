@@ -126,14 +126,7 @@ class Enemy(p.sprite.Sprite):
 
     #updates enemy sprite
     def update(self):
-        self.movement()
         self.animate()
-        
-        self.collide_blocks("x")
-        self.collide_blocks("y")
-
-
-        pass
 
     #controls enemy sprite animations
     def animate(self):
