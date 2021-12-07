@@ -1015,7 +1015,7 @@ class Game:
                 self.login_screen()
 
             if register_button.is_pressed(mouse_pos, mouse_pressed):
-                pass
+                self.register_screen()
 
             self.screen.fill(yellow)
             self.draw_text(title, 100, black, int(display_width/2), int(display_height/5))
@@ -1432,9 +1432,16 @@ class Game:
         self.typing_password = False
         self.input_text_username = ""
         self.input_text_password = ""
+        self.username_flag = False
+        self.password_flag = False
+        self.incorrect_flag = False
 
-        username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*2), int((display_width/5)*3), int(display_height/10), blue, cyan)
+        username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*1.5), int((display_width/5)*3), int(display_height/10), blue, cyan)
         password_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*3), int((display_width/5)*3), int(display_height/10), blue, cyan)
+        enter_button = Button("Enter", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        clear_username_button = Button("Clear", self.font_name, 20, black, int((display_width/5)*4), int((display_height/5)*1.5), int((display_width/10)), int(display_height/10), green, lime)
+        clear_password_button = Button("Clear", self.font_name, 20, black, int((display_width/5)*4), int((display_height/5)*3), int((display_width/10)), int(display_height/10), green, lime)
+        return_button = Button("Return", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2.5), int(display_width/5), int(display_height/10), blue, cyan)
 
         while self.login:
             self.screen.fill(yellow)
@@ -1446,24 +1453,9 @@ class Game:
                     self.active = False
                     p.quit()
                 if event.type == p.KEYDOWN:
-                    if self.typing_username:
-                        if event.key == p.K_RETURN:
-                            self.input_text_username = username_button.msg
-                        elif event.key == p.K_BACKSPACE:
-                            if not username_button.msg:
-                                pass
-                            else:
-                                username_button.msg = username_button.msg[:-1]
-                        elif event.key == p.K_SPACE:
-                            username_button.msg += " "
-                        else:
-                            if len(p.key.name(event.key)) == 1:
-                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
-                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
-                                    username_button.msg += str(p.key.name(event.key))
                     if self.typing_password:
                         if event.key == p.K_RETURN:
-                            self.input_text_password = password_button.msg
+                            self.typing_password = False
                         elif event.key == p.K_BACKSPACE:
                             if not password_button.msg:
                                 pass
@@ -1476,6 +1468,24 @@ class Game:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
                                     password_button.msg += str(p.key.name(event.key))
+                                    self.input_text_password = password_button.msg
+                                    self.incorrect_flag = False
+                    if self.typing_username:
+                        if event.key == p.K_RETURN:
+                            self.typing_password = True
+                            self.typing_username = False
+                        elif event.key == p.K_BACKSPACE:
+                            if not username_button.msg:
+                                pass
+                            else:
+                                username_button.msg = username_button.msg[:-1]
+                        else:
+                            if len(p.key.name(event.key)) == 1:
+                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
+                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
+                                    username_button.msg += str(p.key.name(event.key))
+                                    self.input_text_username = username_button.msg
+                                    self.incorrect_flag = False
 
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
@@ -1514,27 +1524,224 @@ class Game:
                     password_button.text_colour = black
                 password_button.image.fill(password_button.active_colour)
 
+            self.draw_text("Username:", 30, black, int(display_width/2), int((display_height/5)*1.25))
+            self.draw_text("Password:", 30, black, int(display_width/2), int((display_height/5)*2.75))
             username_button.load()
             password_button.load()
+            enter_button.load()
+            clear_username_button.load()
+            clear_password_button.load()
 
-            if self.input_text_username:
-                pass
+            if enter_button.is_pressed(mouse_pos, mouse_pressed):
+                if not self.input_text_username:
+                    self.username_flag = True
+                else:
+                    self.username_flag = False
+                if not self.input_text_password:
+                    self.password_flag = True
+                else:
+                    self.password_flag = False
+                if self.input_text_username and self.input_text_password:
+                    found = check_if_user_exists(self.input_text_username,self.input_text_password)
+                    if found:
+                        self.player_name = self.input_text_username
+                        while found:
+                            self.screen.fill(yellow)
+                            for event in p.event.get():
+                                if event.type == p.QUIT:
+                                    found = False
+                                    self.login = False
+                                    self.playing = False
+                                    self.active = False
+                                    p.quit()
 
-            if self.input_text_username:
-                username_button.msg = ""
+                            return_button.load()
+                            
+                            mouse_pos = p.mouse.get_pos()
+                            mouse_pressed = p.mouse.get_pressed()
+
+                            if return_button.is_pressed(mouse_pos, mouse_pressed):
+                                found = False
+                                self.login = False
+                            p.display.update()
+                    else:
+                        self.incorrect_flag = True
+
+
+            if clear_username_button.is_pressed(mouse_pos, mouse_pressed):
                 self.input_text_username = ""
-                self.typing_username = False 
-
-            if self.input_text_password:
-                password_button.msg = ""
+                username_button.msg = ""
+            if clear_password_button.is_pressed(mouse_pos, mouse_pressed):
                 self.input_text_password = ""
-                self.typing_password = False
-
+                password_button.msg = ""
+                
+            if self.username_flag:
+                self.draw_text("You must enter a username", 20, red, int(display_width/2), int((display_height/5)*2.15))
+            if self.password_flag:
+                self.draw_text("You must enter a password", 20, red, int(display_width/2), int((display_height/5)*3.65))
+            if self.incorrect_flag:
+                self.draw_text("Credentials are incorrect", 30, red, int(display_width/2), int((display_height/5)*4.75))
+            
             p.display.update()
 
     #register screen function if user is registering an account
     def register_screen(self):
-        pass
+        self.register = True
+        self.typing_username = False
+        self.typing_password = False
+        self.input_text_username = ""
+        self.input_text_password = ""
+        self.username_flag = False
+        self.password_flag = False
+        self.incorrect_flag = False
+
+        username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*1.5), int((display_width/5)*3), int(display_height/10), blue, cyan)
+        password_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*3), int((display_width/5)*3), int(display_height/10), blue, cyan)
+        enter_button = Button("Enter", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        clear_username_button = Button("Clear", self.font_name, 20, black, int((display_width/5)*4), int((display_height/5)*1.5), int((display_width/10)), int(display_height/10), green, lime)
+        clear_password_button = Button("Clear", self.font_name, 20, black, int((display_width/5)*4), int((display_height/5)*3), int((display_width/10)), int(display_height/10), green, lime)
+        return_button = Button("Return", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2.5), int(display_width/5), int(display_height/10), blue, cyan)
+
+        while self.register:
+            self.screen.fill(yellow)
+            for event in p.event.get():
+                if event.type == p.QUIT:
+                    self.register = False
+                    self.intro = False
+                    self.playing = False
+                    self.active = False
+                    p.quit()
+                if event.type == p.KEYDOWN:
+                    if self.typing_password:
+                        if event.key == p.K_RETURN:
+                            self.typing_password = False
+                        elif event.key == p.K_BACKSPACE:
+                            if not password_button.msg:
+                                pass
+                            else:
+                                password_button.msg = password_button.msg[:-1]
+                        elif event.key == p.K_SPACE:
+                            password_button.msg += " "
+                        else:
+                            if len(p.key.name(event.key)) == 1:
+                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
+                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
+                                    password_button.msg += str(p.key.name(event.key))
+                                    self.input_text_password = password_button.msg
+                                    self.incorrect_flag = False
+                    if self.typing_username:
+                        if event.key == p.K_RETURN:
+                            self.typing_password = True
+                            self.typing_username = False
+                        elif event.key == p.K_BACKSPACE:
+                            if not username_button.msg:
+                                pass
+                            else:
+                                username_button.msg = username_button.msg[:-1]
+                        else:
+                            if len(p.key.name(event.key)) == 1:
+                                if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
+                                    ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
+                                    username_button.msg += str(p.key.name(event.key))
+                                    self.input_text_username = username_button.msg
+                                    self.incorrect_flag = False
+
+            mouse_pos = p.mouse.get_pos()
+            mouse_pressed = p.mouse.get_pressed()
+
+            if not username_button.rect.collidepoint(mouse_pos):
+                if mouse_pressed[0]:
+                    self.typing_username = False
+
+            if username_button.is_pressed(mouse_pos, mouse_pressed):
+                self.typing_username = True
+
+            if not self.typing_username and not username_button.msg:
+                username_button.text_colour = lightgrey
+                username_button.msg = "Click to type your username"
+
+            if self.typing_username:
+                if username_button.msg == "Click to type your username":
+                    username_button.msg = ""
+                    username_button.text_colour = black
+                username_button.image.fill(username_button.active_colour)
+
+            if not password_button.rect.collidepoint(mouse_pos):
+                if mouse_pressed[0]:
+                    self.typing_password = False
+
+            if password_button.is_pressed(mouse_pos, mouse_pressed):
+                self.typing_password = True
+
+            if not self.typing_password and not password_button.msg:
+                password_button.text_colour = lightgrey
+                password_button.msg = "Click to type your password"
+
+            if self.typing_password:
+                if password_button.msg == "Click to type your password":
+                    password_button.msg = ""
+                    password_button.text_colour = black
+                password_button.image.fill(password_button.active_colour)
+
+            self.draw_text("Username:", 30, black, int(display_width/2), int((display_height/5)*1.25))
+            self.draw_text("Password:", 30, black, int(display_width/2), int((display_height/5)*2.75))
+            username_button.load()
+            password_button.load()
+            enter_button.load()
+            clear_username_button.load()
+            clear_password_button.load()
+
+            if enter_button.is_pressed(mouse_pos, mouse_pressed):
+                if not self.input_text_username:
+                    self.username_flag = True
+                else:
+                    self.username_flag = False
+                if not self.input_text_password:
+                    self.password_flag = True
+                else:
+                    self.password_flag = False
+                if self.input_text_username and self.input_text_password:
+                    found = check_if_user_exists(self.input_text_username,self.input_text_password)
+                    if found:
+                        self.player_name = self.input_text_username
+                        while found:
+                            self.screen.fill(yellow)
+                            for event in p.event.get():
+                                if event.type == p.QUIT:
+                                    found = False
+                                    self.register = False
+                                    self.playing = False
+                                    self.active = False
+                                    p.quit()
+
+                            return_button.load()
+                            
+                            mouse_pos = p.mouse.get_pos()
+                            mouse_pressed = p.mouse.get_pressed()
+
+                            if return_button.is_pressed(mouse_pos, mouse_pressed):
+                                found = False
+                                self.login = False
+                            p.display.update()
+                    else:
+                        self.incorrect_flag = True
+
+
+            if clear_username_button.is_pressed(mouse_pos, mouse_pressed):
+                self.input_text_username = ""
+                username_button.msg = ""
+            if clear_password_button.is_pressed(mouse_pos, mouse_pressed):
+                self.input_text_password = ""
+                password_button.msg = ""
+                
+            if self.username_flag:
+                self.draw_text("You must enter a username", 20, red, int(display_width/2), int((display_height/5)*2.15))
+            if self.password_flag:
+                self.draw_text("You must enter a password", 20, red, int(display_width/2), int((display_height/5)*3.65))
+            if self.incorrect_flag:
+                self.draw_text("Credentials are incorrect", 30, red, int(display_width/2), int((display_height/5)*4.75))
+            
+            p.display.update()
 
 #---------------------------------Game Loop---------------------------------
 g = Game()

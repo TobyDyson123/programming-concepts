@@ -6,7 +6,6 @@ def check_if_user_exists(username, password):
     sql = "SELECT * FROM Users WHERE username = ? AND password = ?"
     cur.execute(sql,(username,password))
     row = cur.fetchall()
-    print(row)
     if row:
         return True
     else:
