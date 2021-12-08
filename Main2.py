@@ -920,81 +920,6 @@ class Game:
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
 
-            if play_button.is_pressed(mouse_pos, mouse_pressed):
-                start_time = time.time()
-                self.new(rooms[starting_room])
-
-            if load_button.is_pressed(mouse_pos, mouse_pressed):
-                try:
-                    json_data = []
-                    with open("saved data.json", "r") as file:
-                        for object in file:
-                            json_data.append(json.loads(object))
-                    for object in json_data:
-                        for user in object:
-                            if self.player_name == user['self.player_name']:                                
-                                self.current_room = user['self.current_room']
-                                tilemap_room1 = user['tilemap_room1']
-                                tilemap_room2 = user['tilemap_room2']
-                                tilemap_room3 = user['tilemap_room3']
-                                tilemap_room4 = user['tilemap_room4']
-                                tilemap_room5 = user['tilemap_room5']
-                                tilemap_room6 = user['tilemap_room6']
-                                tilemap_room7 = user['tilemap_room7']
-                                tilemap_room8 = user['tilemap_room8']
-                                tilemap_room9 = user['tilemap_room9']
-                                tilemap_room10 = user['tilemap_room10']
-                                tilemap_room11 = user['tilemap_room11']
-                                tilemap_room12 = user['tilemap_room12']
-                                tilemap_room13 = user['tilemap_room13']
-                                tilemap_room14 = user['tilemap_room14']
-                                tilemap_room15 = user['tilemap_room15']
-                                tilemap_room16 = user['tilemap_room16']                              
-                                tilemap_room17 = user['tilemap_room17']                                
-                                tilemap_room18 = user['tilemap_room18']                              
-                                tilemap_room19 = user['tilemap_room19']                            
-                                tilemap_room20 = user['tilemap_room20']                              
-                                tilemap_room21 = user['tilemap_room21']                              
-                                tilemap_room22 = user['tilemap_room22']                          
-                                tilemap_room23 = user['tilemap_room23']                            
-                                tilemap_room24 = user['tilemap_room24']  
-                                self.saved_elapsed_time = user['self.saved_elapsed_time']             
-                                xPos = int(user['self.player_sprite.rect.x']/32)
-                                yPos = int(user['self.player_sprite.rect.y']/32)
-                                self.player_inventory =  user['self.player_inventory']
-                                self.player_health =  user['self.player_health']
-                                self.player_gold =  user['self.player_gold']
-                    if xPos == 5 and yPos == 3: #top left
-                        rooms[self.current_room][3] = rooms[self.current_room][3][:5] + "P" + rooms[self.current_room][3][6:]
-                    elif xPos == 14 and yPos == 3: #top right
-                        rooms[self.current_room][3] = rooms[self.current_room][3][:14] + "P" + rooms[self.current_room][3][15:]
-                    elif xPos == 5 and yPos == 6: #bottom left
-                        rooms[self.current_room][6] = rooms[self.current_room][6][:5] + "P" + rooms[self.current_room][6][6:]
-                    elif xPos == 14 and yPos == 6: #bottom right
-                        rooms[self.current_room][6] = rooms[self.current_room][6][:14] + "P" + rooms[self.current_room][6][15:]
-                    rooms = [tilemap_room24,tilemap_room23,tilemap_room22,tilemap_room21,tilemap_room20,tilemap_room19,
-                            tilemap_room8,tilemap_room9,tilemap_room10,tilemap_room11,tilemap_room12,tilemap_room18,
-                            tilemap_room5,tilemap_room4,tilemap_room2,tilemap_room3,tilemap_room13,tilemap_room17,
-                            tilemap_room6,tilemap_room7,tilemap_room1,tilemap_room16,tilemap_room14,tilemap_room15
-                            ]
-                    self.intro = False
-                    start_time = time.time()
-                    self.change_room(rooms[self.current_room], xPos, yPos)
-                    self.update()
-                    self.decision()
-
-                except:
-                    pass
-
-            if login_button.is_pressed(mouse_pos, mouse_pressed):
-                self.login_screen()
-
-            if register_button.is_pressed(mouse_pos, mouse_pressed):
-                self.register_screen()
-
-            if logout_button.is_pressed(mouse_pos, mouse_pressed):
-                self.player_name = ""
-
             self.screen.fill(yellow)
             self.draw_text(title, 100, black, int(display_width/2), int(display_height/5))
             
@@ -1003,10 +928,86 @@ class Game:
                 load_button.load()
                 logout_button.load()
                 self.draw_text("Hello, " + str(self.player_name), 30, black, int(display_width/2), int((display_height/5)*0.25))
+
+                if play_button.is_pressed(mouse_pos, mouse_pressed):
+                    start_time = time.time()
+                    self.new(rooms[starting_room])
+
+                if load_button.is_pressed(mouse_pos, mouse_pressed):
+                    try:
+                        json_data = []
+                        with open("saved data.json", "r") as file:
+                            for object in file:
+                                json_data.append(json.loads(object))
+                        for object in json_data:
+                            for user in object:
+                                if self.player_name == user['self.player_name']:                                
+                                    self.current_room = user['self.current_room']
+                                    tilemap_room1 = user['tilemap_room1']
+                                    tilemap_room2 = user['tilemap_room2']
+                                    tilemap_room3 = user['tilemap_room3']
+                                    tilemap_room4 = user['tilemap_room4']
+                                    tilemap_room5 = user['tilemap_room5']
+                                    tilemap_room6 = user['tilemap_room6']
+                                    tilemap_room7 = user['tilemap_room7']
+                                    tilemap_room8 = user['tilemap_room8']
+                                    tilemap_room9 = user['tilemap_room9']
+                                    tilemap_room10 = user['tilemap_room10']
+                                    tilemap_room11 = user['tilemap_room11']
+                                    tilemap_room12 = user['tilemap_room12']
+                                    tilemap_room13 = user['tilemap_room13']
+                                    tilemap_room14 = user['tilemap_room14']
+                                    tilemap_room15 = user['tilemap_room15']
+                                    tilemap_room16 = user['tilemap_room16']                              
+                                    tilemap_room17 = user['tilemap_room17']                                
+                                    tilemap_room18 = user['tilemap_room18']                              
+                                    tilemap_room19 = user['tilemap_room19']                            
+                                    tilemap_room20 = user['tilemap_room20']                              
+                                    tilemap_room21 = user['tilemap_room21']                              
+                                    tilemap_room22 = user['tilemap_room22']                          
+                                    tilemap_room23 = user['tilemap_room23']                            
+                                    tilemap_room24 = user['tilemap_room24']  
+                                    self.saved_elapsed_time = user['self.saved_elapsed_time']             
+                                    xPos = int(user['self.player_sprite.rect.x']/32)
+                                    yPos = int(user['self.player_sprite.rect.y']/32)
+                                    self.player_inventory =  user['self.player_inventory']
+                                    self.player_health =  user['self.player_health']
+                                    self.player_gold =  user['self.player_gold']
+                        if xPos == 5 and yPos == 3: #top left
+                            rooms[self.current_room][3] = rooms[self.current_room][3][:5] + "P" + rooms[self.current_room][3][6:]
+                        elif xPos == 14 and yPos == 3: #top right
+                            rooms[self.current_room][3] = rooms[self.current_room][3][:14] + "P" + rooms[self.current_room][3][15:]
+                        elif xPos == 5 and yPos == 6: #bottom left
+                            rooms[self.current_room][6] = rooms[self.current_room][6][:5] + "P" + rooms[self.current_room][6][6:]
+                        elif xPos == 14 and yPos == 6: #bottom right
+                            rooms[self.current_room][6] = rooms[self.current_room][6][:14] + "P" + rooms[self.current_room][6][15:]
+                        rooms = [tilemap_room24,tilemap_room23,tilemap_room22,tilemap_room21,tilemap_room20,tilemap_room19,
+                                tilemap_room8,tilemap_room9,tilemap_room10,tilemap_room11,tilemap_room12,tilemap_room18,
+                                tilemap_room5,tilemap_room4,tilemap_room2,tilemap_room3,tilemap_room13,tilemap_room17,
+                                tilemap_room6,tilemap_room7,tilemap_room1,tilemap_room16,tilemap_room14,tilemap_room15
+                                ]
+                        self.intro = False
+                        start_time = time.time()
+                        self.change_room(rooms[self.current_room], xPos, yPos)
+                        self.update()
+                        self.decision()
+
+                    except:
+                        pass
+            
+                if logout_button.is_pressed(mouse_pos, mouse_pressed):
+                    self.player_name = ""
+            
             else:
                 self.draw_text("Login or register below", 32, black, int((display_width/2)), int((display_height/5)*3.5))
                 login_button.load()
                 register_button.load()
+
+                if login_button.is_pressed(mouse_pos, mouse_pressed):
+                    self.login_screen()
+
+                if register_button.is_pressed(mouse_pos, mouse_pressed):
+                    self.register_screen()
                 
             p.display.update()
             self.clock.tick(FPS)
