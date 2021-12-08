@@ -43,6 +43,7 @@ class Game:
 
         self.current_room = starting_room
         self.show_map = False
+        self.saved_elapsed_time = 0
 
         self.up_text = False
         self.down_text = False
@@ -531,6 +532,8 @@ class Game:
 
             elif "save" in self.choice:
                 if self.player_name:
+                    end_time = time.time()
+                    elapsed_time = end_time - start_time
                     user_list = [] #list to hold JSON dictionary
                     user_dict = {"self.player_name" : self.player_name, #dictionary containing items wanting to add to dictionary
                                 "self.current_room" : self.current_room,
@@ -562,7 +565,8 @@ class Game:
                                 "self.player_sprite.rect.y" : self.player_sprite.rect.y,
                                 "self.player_inventory" : self.player_inventory,
                                 "self.player_health" : self.player_health,
-                                "self.player_gold" : self.player_gold}
+                                "self.player_gold" : self.player_gold,
+                                "self.saved_elapsed_time" : self.saved_elapsed_time + elapsed_time}
                     with open("saved data.json", "r") as file:
                         for obj in file:                    #for each object in the json file
                             json_dict = json.loads(obj)         #load the object into a variable
@@ -929,36 +933,37 @@ class Game:
                     for object in json_data:
                         for user in object:
                             if self.player_name == user['self.player_name']:                                
-                                    self.current_room = user['self.current_room']
-                                    tilemap_room1 = user['tilemap_room1']
-                                    tilemap_room2 = user['tilemap_room2']
-                                    tilemap_room3 = user['tilemap_room3']
-                                    tilemap_room4 = user['tilemap_room4']
-                                    tilemap_room5 = user['tilemap_room5']
-                                    tilemap_room6 = user['tilemap_room6']
-                                    tilemap_room7 = user['tilemap_room7']
-                                    tilemap_room8 = user['tilemap_room8']
-                                    tilemap_room9 = user['tilemap_room9']
-                                    tilemap_room10 = user['tilemap_room10']
-                                    tilemap_room11 = user['tilemap_room11']
-                                    tilemap_room12 = user['tilemap_room12']
-                                    tilemap_room13 = user['tilemap_room13']
-                                    tilemap_room14 = user['tilemap_room14']
-                                    tilemap_room15 = user['tilemap_room15']
-                                    tilemap_room16 = user['tilemap_room16']                              
-                                    tilemap_room17 = user['tilemap_room17']                                
-                                    tilemap_room18 = user['tilemap_room18']                              
-                                    tilemap_room19 = user['tilemap_room19']                            
-                                    tilemap_room20 = user['tilemap_room20']                              
-                                    tilemap_room21 = user['tilemap_room21']                              
-                                    tilemap_room22 = user['tilemap_room22']                          
-                                    tilemap_room23 = user['tilemap_room23']                            
-                                    tilemap_room24 = user['tilemap_room24']               
-                                    xPos = int(user['self.player_sprite.rect.x']/32)
-                                    yPos = int(user['self.player_sprite.rect.y']/32)
-                                    self.player_inventory =  user['self.player_inventory']
-                                    self.player_health =  user['self.player_health']
-                                    self.player_gold =  user['self.player_gold']
+                                self.current_room = user['self.current_room']
+                                tilemap_room1 = user['tilemap_room1']
+                                tilemap_room2 = user['tilemap_room2']
+                                tilemap_room3 = user['tilemap_room3']
+                                tilemap_room4 = user['tilemap_room4']
+                                tilemap_room5 = user['tilemap_room5']
+                                tilemap_room6 = user['tilemap_room6']
+                                tilemap_room7 = user['tilemap_room7']
+                                tilemap_room8 = user['tilemap_room8']
+                                tilemap_room9 = user['tilemap_room9']
+                                tilemap_room10 = user['tilemap_room10']
+                                tilemap_room11 = user['tilemap_room11']
+                                tilemap_room12 = user['tilemap_room12']
+                                tilemap_room13 = user['tilemap_room13']
+                                tilemap_room14 = user['tilemap_room14']
+                                tilemap_room15 = user['tilemap_room15']
+                                tilemap_room16 = user['tilemap_room16']                              
+                                tilemap_room17 = user['tilemap_room17']                                
+                                tilemap_room18 = user['tilemap_room18']                              
+                                tilemap_room19 = user['tilemap_room19']                            
+                                tilemap_room20 = user['tilemap_room20']                              
+                                tilemap_room21 = user['tilemap_room21']                              
+                                tilemap_room22 = user['tilemap_room22']                          
+                                tilemap_room23 = user['tilemap_room23']                            
+                                tilemap_room24 = user['tilemap_room24']  
+                                self.saved_elapsed_time = user['self.saved_elapsed_time']             
+                                xPos = int(user['self.player_sprite.rect.x']/32)
+                                yPos = int(user['self.player_sprite.rect.y']/32)
+                                self.player_inventory =  user['self.player_inventory']
+                                self.player_health =  user['self.player_health']
+                                self.player_gold =  user['self.player_gold']
                     if xPos == 5 and yPos == 3: #top left
                         rooms[self.current_room][3] = rooms[self.current_room][3][:5] + "P" + rooms[self.current_room][3][6:]
                     elif xPos == 14 and yPos == 3: #top right
@@ -978,9 +983,6 @@ class Game:
                     self.update()
                     self.decision()
 
-                except JSONDecodeError:
-                    pass
-                
                 except:
                     pass
 
@@ -1358,7 +1360,7 @@ class Game:
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
 
         end_time = time.time()
-        elapsed_time = int(end_time - start_time)
+        elapsed_time = int(end_time - start_time + self.saved_elapsed_time)
         time_taken = ""
         minutes = elapsed_time//60
         minutes_remainder = elapsed_time%60
