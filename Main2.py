@@ -291,7 +291,7 @@ class Game:
                     elif "yellow door" in self.choice and "Yellow Key" in self.player_inventory.keys():
                         for i, row in enumerate(rooms[self.current_room]):
                             for j, column in enumerate(row):
-                                if column == "-":
+                                if column == "~":
                                     rooms[self.current_room][i] = rooms[self.current_room][i][:j] + "*" + rooms[self.current_room][i][j+1:]
                                     Ground(self, j, i, True)
                         self.write_text("You have used the yellow key to open the yellow door", colour=yellow)
