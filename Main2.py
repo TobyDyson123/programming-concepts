@@ -597,7 +597,7 @@ class Game:
                     self.write_text("Progress has been saved!", colour=yellow) #finally, let the user know their progress is saved
 
                 else:
-                    self.write_text("Unable to save as not logged in!", colour=red)
+                    self.write_text("Unable to save!", colour=red)
             elif "die" in self.choice:
                 self.damage_player(self.player_health)
 
