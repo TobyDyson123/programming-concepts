@@ -572,7 +572,6 @@ class Game:
                         if not user_list:                     #if file was empty before the wipe
                             string = json.dumps([user_dict])          #just add the dictionary to the new empty file
                             file.write(string)
-                            print ("The file was empty")
                         else:                               #otherwise
                             self.dict_found = False
                             for element in user_list:    
@@ -581,20 +580,15 @@ class Game:
                                         element[element.index(user)] = user_dict #override the contents with the new save
                                         self.dict_found = True
                             if self.dict_found:
-                                print ("Previous save was found")
                                 for element in user_list:
                                     string = json.dumps(element)
                                     file.write(string)
                             if not self.dict_found:   #if user doesn't have a previous save
-                                print ("Previous save was not found")
-                                print ("This is the length of array before adding new save: " + str(len(user_list[0])))
                                 for element in user_list:
                                     element.append(user_dict) #add the dictionary to the user_list list as a new save for the user
-                                print ("This is the length of array after adding new save: " + str(len(user_list[0])))
                                 for element in user_list:       #for each dictionary in user_list
                                     string = json.dumps(element)        #add the dictionary to the file
                                     file.write(string)
-                                print ("This is what was written to the file:\n\n",string)
                         file.close()
                     self.write_text("Progress has been saved!", colour=yellow) #finally, let the user know their progress is saved
 
@@ -760,7 +754,7 @@ class Game:
     def change_room(self, room, playerx, playery):
         #player enters new room - room is changed
         if self.current_room == 0:
-            self.game_over()
+            self.game_complete()
         self.up_text = False
         self.down_text = False
         self.left_text = False
@@ -901,13 +895,14 @@ class Game:
         global tilemap_room23
         global tilemap_room24
         global rooms
+        global start_time
         
         self.intro = True
 
         play_button = Button("Start", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
         load_button = Button("Load", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*3), int(display_width/5), int(display_height/10), blue, cyan)
-        login_button = Button("Login", self.font_name, 30, black, int((display_width/5)*1.2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
-        register_button = Button("Register", self.font_name, 30, black, int((display_width/5)*2.8), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        login_button = Button("Login", self.font_name, 30, black, int((display_width/5)*1), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        register_button = Button("Register", self.font_name, 30, black, int((display_width/5)*3), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         logout_button = Button("Logout", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
 
         while self.intro:
@@ -922,7 +917,8 @@ class Game:
             mouse_pressed = p.mouse.get_pressed()
 
             if play_button.is_pressed(mouse_pos, mouse_pressed):
-                self.intro = False
+                start_time = time.time()
+                self.new(rooms[starting_room])
 
             if load_button.is_pressed(mouse_pos, mouse_pressed):
                 try:
@@ -977,6 +973,7 @@ class Game:
                             tilemap_room6,tilemap_room7,tilemap_room1,tilemap_room16,tilemap_room14,tilemap_room15
                             ]
                     self.intro = False
+                    start_time = time.time()
                     self.change_room(rooms[self.current_room], xPos, yPos)
                     self.update()
                     self.decision()
@@ -1012,28 +1009,6 @@ class Game:
             p.display.update()
             self.clock.tick(FPS)
         self.screen.fill(black)
-
-    #instructions screen function
-    def instructions_screen(self):
-        self.screen.fill(black)
-        self.draw_text("Welcome to " + title, 30, white, int(display_width/2), 30)
-        self.draw_text("The aim of the game is to collect as much score as possible", 30, white, int(display_width/2), 60)
-        self.draw_text("while also defending yourself againsts zombies.", 30, white, int(display_width/2), 90)
-        self.draw_text("You will find coins around the map, which can be picked up", 30, white, int(display_width/2), 120)
-        self.draw_text("and spent at the shop for gear to help you last longer.", 30, white, int(display_width/2), 150)
-        self.draw_text("But that's not the only way to collect coins.", 30, white, int(display_width/2), 180)
-        self.draw_text("Slaying zombies will not only give you score but bonus coins.", 30, white, int(display_width/2), 210)
-        self.draw_text("Be careful fighting zombies though, as they can", 30, white, int(display_width/2), 240)
-        self.draw_text("damage you, and you only have so much health!", 30, white, int(display_width/2), 270)
-        self.draw_text("Press c to get hunting!", 30, white, int(display_width/2), 300)
-
-        self.draw_text("Controls:", 25, magenta, int((display_width/2)), 350)
-        self.draw_text("W: Move up", 25, white, int((display_width/2)), 370)
-        self.draw_text("A: Move left", 25, white, int((display_width/2)), 390)
-        self.draw_text("S: Move down", 25, white, int((display_width/2)), 410)
-        self.draw_text("D: Move right", 25, white, int((display_width/2)), 430)
-        self.draw_text("M: Toggle map", 25, white, int((display_width/2)), 460)
-        self.wait_for_key()
 
     #game over screen function        
     def game_over(self):
@@ -1379,6 +1354,7 @@ class Game:
 
     #game complete function onces player has escaped dungeon
     def game_complete(self):
+        global end_time
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
 
         end_time = time.time()
@@ -1390,6 +1366,24 @@ class Game:
         if minutes > 0:
             time_taken += str(minutes) + " minutes, "
         time_taken += str(seconds) + " seconds"
+
+        user_list = []
+        with open("saved data.json", "r") as file:
+            for obj in file:                    #for each object in the json file
+                json_dict = json.loads(obj)         #load the object into a variable
+                user_list.append(json_dict)         #and append it to user_list
+            file.close()
+        with open("saved data.json", "w") as file:
+            self.dict_found = False
+            for element in user_list:    
+                for user in element:           #for each dictionary in user_list
+                    if user["self.player_name"] == self.player_name: #if the dictionary was a save from the current player
+                        del element[element.index(user)]  #delete the save
+                        self.dict_found = True
+            for element in user_list:       #for each dictionary in user_list
+                string = json.dumps(element)        #add the dictionary to the file
+                file.write(string)
+            file.close()
 
         add_user_score_to_database(self.player_name, self.player_gold, elapsed_time)
 
@@ -1760,12 +1754,4 @@ class Game:
 #---------------------------------Game Loop---------------------------------
 g = Game()
 g.intro_screen()
-#g.instructions_screen()
-global start_time
-global end_time
-start_time = time.time()
-g.new(rooms[starting_room])
-while g.active:
-    g.run()
-    g.game_over()
 p.quit()
