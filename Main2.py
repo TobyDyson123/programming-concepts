@@ -298,13 +298,13 @@ class Game:
                         self.draw()
                         self.update()
                         p.display.update()
-                    elif "green door" in self.choice and not self.has_green_key:
+                    elif "green door" in self.choice and "Green Key" not in self.player_inventory.keys():
                         self.write_text("It appears the green door is locked, there must be a key to open it somewhere...", colour=yellow)
-                    elif "blue door" in self.choice and not self.has_blue_key:
+                    elif "blue door" in self.choice and "Blue Key" not in self.player_inventory.keys():
                         self.write_text("It appears the blue door is locked, there must be a key to open it somewhere...", colour=yellow)
-                    elif "red door" in self.choice and not self.has_red_key:
+                    elif "red door" in self.choice and "Red Key" not in self.player_inventory.keys():
                         self.write_text("It appears the red door is locked, there must be a key to open it somewhere...", colour=yellow)
-                    elif "yellow door" in self.choice and not self.has_yellow_key:
+                    elif "yellow door" in self.choice and "Yellow Key" not in self.player_inventory.keys():
                         self.write_text("It appears the yellow door is locked, there must be a key to open it somewhere...", colour=yellow)
                     else:
                         self.write_text("There is no door to open named that, try opening " + self.analysis[5], colour=red)
@@ -326,28 +326,24 @@ class Game:
                                 self.write_text("You have already spoken to Ash; he gave you the green key", colour=red)
                             else:
                                 self.write_text("You spoke to " + sprite.name + " and he gave you a green key. Maybe it could unlock something...", colour=yellow)
-                                self.has_green_key = True
                                 self.player_inventory.update({"Green Key" : 1})
                         elif self.target_name == "Bazza":
                             if "Blue Key" in self.player_inventory.keys():
                                 self.write_text("You have already spoken to Bazza; he gave you the blue key", colour=red)
                             else:
                                 self.write_text("You spoke to " + sprite.name + " and he gave you a blue key. Maybe it could unlock something...", colour=yellow)
-                                self.has_blue_key = True
                                 self.player_inventory.update({"Blue Key" : 1})
                         elif self.target_name == "Gordon":
                             if "Red Key" in self.player_inventory.keys():
                                 self.write_text("You have already spoken to Gordon; he gave you the red key", colour=red)
                             else:
                                 self.write_text("You spoke to " + sprite.name + " and he gave you a red key. Maybe it could unlock something...", colour=yellow)
-                                self.has_red_key = True
                                 self.player_inventory.update({"Red Key" : 1})
                         elif self.target_name == "Gale":
                             if "Yellow Key" in self.player_inventory.keys():
                                 self.write_text("You have already spoken to Gale; he gave you the yellow key", colour=red)
                             else:
                                 self.write_text("You spoke to " + sprite.name + " and he gave you a yellow key. Maybe it could unlock something...", colour=yellow)
-                                self.has_yellow_key = True
                                 self.player_inventory.update({"Yellow Key" : 1})
                         elif self.target_name == "Jerrard":
                             self.write_text("Jerrard tells you that he thinks the wall in the bottom right of " + room_names[18] + " looks unstable. He recommends punching the wall. Who knows what's on the other side...", colour=yellow)
@@ -571,25 +567,34 @@ class Game:
                         for obj in file:                    #for each object in the json file
                             json_dict = json.loads(obj)         #load the object into a variable
                             user_list.append(json_dict)         #and append it to user_list
-                        print (user_list)
-                        self.dict_found = False
-                        for element in user_list:               #for each dictionary in user_list
-                            if element["self.player_name"] == self.player_name: #if the dictionary was a save from the current player
-                                user_list[user_list.index(element)] = user_dict #override the contents with the new save
-                                self.dict_found = True
-                        if not self.dict_found:   #if user doesn't have a previous save
-                            user_list.append(user_dict) #add the dictionary to the user_list list as a new save for the user
                         file.close()
-                    with open("saved data.json", "w") as file: #wipe the file
-                        file.close()
-                    with open("saved data.json", "a") as file:
+                    with open("saved data.json", "w") as file:
                         if not user_list:                     #if file was empty before the wipe
-                            json.dump(user_dict, file)          #just add the dictionary to the new empty file
+                            string = json.dumps([user_dict])          #just add the dictionary to the new empty file
+                            file.write(string)
+                            print ("The file was empty")
                         else:                               #otherwise
-                            for element in user_list:       #for each dictionary in user_list
-                                print (element)
-                                print (element["self.player_name"])
-                                json.dump(element, file)        #add the dictionary to the file
+                            self.dict_found = False
+                            for element in user_list:    
+                                for user in element:           #for each dictionary in user_list
+                                    if user["self.player_name"] == self.player_name: #if the dictionary was a save from the current player
+                                        element[element.index(user)] = user_dict #override the contents with the new save
+                                        self.dict_found = True
+                            if self.dict_found:
+                                print ("Previous save was found")
+                                for element in user_list:
+                                    string = json.dumps(element)
+                                    file.write(string)
+                            if not self.dict_found:   #if user doesn't have a previous save
+                                print ("Previous save was not found")
+                                print ("This is the length of array before adding new save: " + str(len(user_list[0])))
+                                for element in user_list:
+                                    element.append(user_dict) #add the dictionary to the user_list list as a new save for the user
+                                print ("This is the length of array after adding new save: " + str(len(user_list[0])))
+                                for element in user_list:       #for each dictionary in user_list
+                                    string = json.dumps(element)        #add the dictionary to the file
+                                    file.write(string)
+                                print ("This is what was written to the file:\n\n",string)
                         file.close()
                     self.write_text("Progress has been saved!", colour=yellow) #finally, let the user know their progress is saved
 
@@ -605,16 +610,7 @@ class Game:
                 amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
                 self.give_gold_to_player(amount)
                 self.write_text("Received " + str(amount) + " gold. Gold: " + str(self.player_gold), colour=yellow)
-            elif "show" in self.choice:
-                user_list = []
-                with open("saved data.json", "r") as file:
-                    for obj in file:
-                        json_dict = json.loads(obj)
-                        user_list.append(json_dict)
-                for element in user_list:
-                    if element["self.player_name"] == self.player_name:
-                        print (element)
-            
+                
             else:
                 self.write_text("Unknown action.", colour=red)
 
@@ -934,89 +930,61 @@ class Game:
                     with open("saved data.json", "r") as file:
                         for object in file:
                             json_data.append(json.loads(object))
-                    print (json_data)
                     for object in json_data:
-                        for key, value in object.items():
-                            if key == "self.player_name" and value == self.player_name:
-                                if key == "self.current_room":
-                                    self.current_room = value
-                                elif key == "tilemap_room1":
-                                    tilemap_room1 = value
-                                elif key == "tilemap_room2":
-                                    tilemap_room2 = value
-                                elif key == "tilemap_room3":
-                                    tilemap_room3 = value
-                                elif key == "tilemap_room4":
-                                    tilemap_room4 = value
-                                elif key == "tilemap_room5":
-                                    tilemap_room5 = value
-                                elif key == "tilemap_room6":
-                                    tilemap_room6 = value
-                                elif key == "tilemap_room7":
-                                    tilemap_room7 = value
-                                elif key == "tilemap_room8":
-                                    tilemap_room8 = value
-                                elif key == "tilemap_room9":
-                                    tilemap_room9 = value
-                                elif key == "tilemap_room10":
-                                    tilemap_room10 = value
-                                elif key == "tilemap_room11":
-                                    tilemap_room11 = value
-                                elif key == "tilemap_room12":
-                                    tilemap_room12 = value
-                                elif key == "tilemap_room13":
-                                    tilemap_room13 = value
-                                elif key == "tilemap_room14":
-                                    tilemap_room14 = value
-                                elif key == "tilemap_room15":
-                                    tilemap_room15 = value
-                                elif key == "tilemap_room16":
-                                    tilemap_room16 = value
-                                elif key == "tilemap_room17":
-                                    tilemap_room17 = value
-                                elif key == "tilemap_room18":
-                                    tilemap_room18 = value
-                                elif key == "tilemap_room19":
-                                    tilemap_room19 = value
-                                elif key == "tilemap_room20":
-                                    tilemap_room20 = value
-                                elif key == "tilemap_room21":
-                                    tilemap_room21 = value
-                                elif key == "tilemap_room22":
-                                    tilemap_room22 = value
-                                elif key == "tilemap_room23":
-                                    tilemap_room23 = value
-                                elif key == "tilemap_room24":
-                                    tilemap_room24 = value
-                                elif key == "self.player_sprite.rect.x":
-                                    xPos = int(value/32)
-                                elif key == "self.player_sprite.rect.y":
-                                    yPos = int(value/32)
-                                elif key == "self.player_inventory":
-                                    self.player_inventory = value
-                                elif key == "self.player_health":
-                                    self.player_health = value
-                                elif key == "self.player_gold":
-                                    self.player_gold = value
-                            if xPos == 5 and yPos == 3: #top left
-                                rooms[self.current_room][3] = rooms[self.current_room][3][:5] + "P" + rooms[self.current_room][3][6:]
-                            elif xPos == 14 and yPos == 3: #top right
-                                rooms[self.current_room][3] = rooms[self.current_room][3][:14] + "P" + rooms[self.current_room][3][15:]
-                            elif xPos == 5 and yPos == 6: #bottom left
-                                rooms[self.current_room][6] = rooms[self.current_room][6][:5] + "P" + rooms[self.current_room][6][6:]
-                            elif xPos == 14 and yPos == 6: #bottom right
-                                rooms[self.current_room][6] = rooms[self.current_room][6][:14] + "P" + rooms[self.current_room][6][15:]
-                            rooms = [tilemap_room24,tilemap_room23,tilemap_room22,tilemap_room21,tilemap_room20,tilemap_room19,
-                                    tilemap_room8,tilemap_room9,tilemap_room10,tilemap_room11,tilemap_room12,tilemap_room18,
-                                    tilemap_room5,tilemap_room4,tilemap_room2,tilemap_room3,tilemap_room13,tilemap_room17,
-                                    tilemap_room6,tilemap_room7,tilemap_room1,tilemap_room16,tilemap_room14,tilemap_room15
-                                    ]
-                            self.intro = False
-                            self.change_room(rooms[self.current_room], xPos, yPos)
-                            self.update()
-                            self.decision()
+                        for user in object:
+                            if self.player_name == user['self.player_name']:                                
+                                    self.current_room = user['self.current_room']
+                                    tilemap_room1 = user['tilemap_room1']
+                                    tilemap_room2 = user['tilemap_room2']
+                                    tilemap_room3 = user['tilemap_room3']
+                                    tilemap_room4 = user['tilemap_room4']
+                                    tilemap_room5 = user['tilemap_room5']
+                                    tilemap_room6 = user['tilemap_room6']
+                                    tilemap_room7 = user['tilemap_room7']
+                                    tilemap_room8 = user['tilemap_room8']
+                                    tilemap_room9 = user['tilemap_room9']
+                                    tilemap_room10 = user['tilemap_room10']
+                                    tilemap_room11 = user['tilemap_room11']
+                                    tilemap_room12 = user['tilemap_room12']
+                                    tilemap_room13 = user['tilemap_room13']
+                                    tilemap_room14 = user['tilemap_room14']
+                                    tilemap_room15 = user['tilemap_room15']
+                                    tilemap_room16 = user['tilemap_room16']                              
+                                    tilemap_room17 = user['tilemap_room17']                                
+                                    tilemap_room18 = user['tilemap_room18']                              
+                                    tilemap_room19 = user['tilemap_room19']                            
+                                    tilemap_room20 = user['tilemap_room20']                              
+                                    tilemap_room21 = user['tilemap_room21']                              
+                                    tilemap_room22 = user['tilemap_room22']                          
+                                    tilemap_room23 = user['tilemap_room23']                            
+                                    tilemap_room24 = user['tilemap_room24']               
+                                    xPos = int(user['self.player_sprite.rect.x']/32)
+                                    yPos = int(user['self.player_sprite.rect.y']/32)
+                                    self.player_inventory =  user['self.player_inventory']
+                                    self.player_health =  user['self.player_health']
+                                    self.player_gold =  user['self.player_gold']
+                    if xPos == 5 and yPos == 3: #top left
+                        rooms[self.current_room][3] = rooms[self.current_room][3][:5] + "P" + rooms[self.current_room][3][6:]
+                    elif xPos == 14 and yPos == 3: #top right
+                        rooms[self.current_room][3] = rooms[self.current_room][3][:14] + "P" + rooms[self.current_room][3][15:]
+                    elif xPos == 5 and yPos == 6: #bottom left
+                        rooms[self.current_room][6] = rooms[self.current_room][6][:5] + "P" + rooms[self.current_room][6][6:]
+                    elif xPos == 14 and yPos == 6: #bottom right
+                        rooms[self.current_room][6] = rooms[self.current_room][6][:14] + "P" + rooms[self.current_room][6][15:]
+                    rooms = [tilemap_room24,tilemap_room23,tilemap_room22,tilemap_room21,tilemap_room20,tilemap_room19,
+                            tilemap_room8,tilemap_room9,tilemap_room10,tilemap_room11,tilemap_room12,tilemap_room18,
+                            tilemap_room5,tilemap_room4,tilemap_room2,tilemap_room3,tilemap_room13,tilemap_room17,
+                            tilemap_room6,tilemap_room7,tilemap_room1,tilemap_room16,tilemap_room14,tilemap_room15
+                            ]
+                    self.intro = False
+                    self.change_room(rooms[self.current_room], xPos, yPos)
+                    self.update()
+                    self.decision()
 
                 except JSONDecodeError:
+                    pass
+                
+                except:
                     pass
 
             if login_button.is_pressed(mouse_pos, mouse_pressed):
@@ -1035,6 +1003,7 @@ class Game:
                 play_button.load()
                 load_button.load()
                 logout_button.load()
+                self.draw_text("Hello, " + str(self.player_name), 30, black, int(display_width/2), int((display_height/5)*0.25))
             else:
                 self.draw_text("Login or register below", 32, black, int((display_width/2)), int((display_height/5)*3.5))
                 login_button.load()
@@ -1447,6 +1416,8 @@ class Game:
             self.draw_text("Highscores:", 35, black, int(display_width/4), int((display_height/5)*(1.5 + 0.35)))
             highscores = get_all_highscores_by_gold()
             for i, entry in enumerate(highscores):
+                if i > 4:
+                    break
                 self.draw_text(str(entry[0]) + " " + str(entry[1]) + " " + str(entry[2]), 35, black, int(display_width/2), int((display_height/5)*(1.5 + 0.35 * (1 + i))))
            
             exit_button.load()

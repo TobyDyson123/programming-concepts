@@ -26,8 +26,14 @@ def add_details_to_database(username, password):
     conn.commit()
 
 def add_user_score_to_database(username, gold, time):
-    sql = "INSERT INTO Scores(userID, gold, timeTaken) VALUES ((SELECT userID FROM Users WHERE username = '?'), ?, ?)"
-    cur.execute(sql, (username, gold, time))
+    sql = "SELECT userID FROM Users WHERE username LIKE ?"
+    cur.execute(sql, (username,))
+    rows = cur.fetchall()
+    for row in rows:
+        user_id = row[0]
+    conn.commit()
+    sql = "INSERT INTO Scores(userID, gold, timeTaken) VALUES (?, ?, ?)"
+    cur.execute(sql, (user_id, gold, time))
     conn.commit()
 
 def get_all_highscores_by_gold():
