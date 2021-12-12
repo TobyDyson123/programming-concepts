@@ -64,7 +64,7 @@ tilemap_room2 = [
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
 
-#Room 3 - Graveyard
+#Room 3 - 3
 tilemap_room3 = [
     "BBBBBBBBBBBBBB*BBBBB",
     "B.....N............B",
@@ -77,7 +77,7 @@ tilemap_room3 = [
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
 
-#Room 4 - City
+#Room 4 - 4
 tilemap_room4 = [
     "BBBBBBBBBBBBBBBBBBBB",
     "B..................B",
@@ -90,7 +90,7 @@ tilemap_room4 = [
     "B..................B",
     "BBBBBBBBBBBBBBBBBBBB"]
 
-#Room 5 - Maze
+#Room 5 - 5
 tilemap_room5 = [
     "BBBBBBBBBBBBBB*BBBBB",
     "B..C...............B",
@@ -103,7 +103,7 @@ tilemap_room5 = [
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
 
-#Room 6 - Vault Entrance
+#Room 6 - 6
 tilemap_room6 = [
     "BBBBBBBBBBBBBB*BBBBB",
     "B...............W..B",
@@ -226,7 +226,7 @@ tilemap_room14 = [
     "BBBBBBBBBBBBBBBBBBBB"]
 
 
-#Room 15 - Shop
+#Room 15 - 15
 tilemap_room15 = [
     "BBBBBBBBBBBBBBBBBBBB",
     "B..................B",
@@ -379,8 +379,8 @@ rooms = [
 room_names = [
     "Room 24","Room 23","Room 22","Room 21","Room 20","Room 19",
     "Room 8","Room 9","Room 10","Room 11","Room 12","Room 18",
-    "Maze","City","Courtyard","Graveyard","Room 13","Room 17",
-    "Room 6","Vault","Start","Room 16","Room 14","Shop"
+    "Room 5","Room 4","Courtyard","Room 3","Room 13","Room 17",
+    "Room 6","Vault","Start","Room 16","Room 14","Room 15"
     ]
 
 

@@ -353,9 +353,9 @@ class Game:
                         elif self.target_name == "Kane":
                             self.write_text("Kane tells you that he has seen treasure chests hidden in some of the areas...", colour=yellow)
                         elif self.target_name == "Leo":
-                            pass
+                            self.write_text("Leo warns you that although fighting enemies earns you gold, they can hurt you", colour=yellow)
                         elif self.target_name == "Eddie":
-                            pass      
+                            self.write_text("Eddie tells you that he last saw Jerrard in " + rooms[10], colour=yellow)      
                     else:
                         self.write_text("There is nobody around to speak to with that name, try speaking with " + self.target_name, colour=red)
                 else:
