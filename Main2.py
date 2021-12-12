@@ -353,23 +353,9 @@ class Game:
                         elif self.target_name == "Kane":
                             self.write_text("Kane tells you that he has seen treasure chests hidden in some of the areas...", colour=yellow)
                         elif self.target_name == "Leo":
-                            self.word = random.choice(self.anagram_words)
-                            self.scrambled_word = random.choice(["".join(perm) for perm in permutations(self.word)])
-                            self.write_text("Leo has offered you gold in exchange for solving this anagram:", colour=yellow)
-                            self.guess = self.write_text(self.scrambled_word, True, colour=yellow)
-                            if self.guess.strip() == self.word:
-                                self.write_text("That was correct!", colour=yellow)
-                            else:
-                                self.write_text("That was incorrect!", colour=yellow)
+                            pass
                         elif self.target_name == "Eddie":
-                            self.word = random.choice(self.anagram_words)
-                            self.scrambled_word = random.choice(["".join(perm) for perm in permutations(self.word)])
-                            self.write_text("Eddie has offered you gold in exchange for solving this anagram:", colour=yellow)
-                            self.guess = self.write_text(self.scrambled_word, True, colour=yellow)
-                            if self.guess.strip() == self.word:
-                                self.write_text("That was correct!", colour=yellow)
-                            else:
-                                self.write_text("That was incorrect!", colour=yellow)      
+                            pass      
                     else:
                         self.write_text("There is nobody around to speak to with that name, try speaking with " + self.target_name, colour=red)
                 else:
@@ -1359,6 +1345,11 @@ class Game:
     def game_complete(self):
         global end_time
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        byGold_button = Button("Sort by Gold", self.font_name, 30, black, int((display_width/20)), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
+        byTime_button = Button("Sort by Time", self.font_name, 30, black, int((display_width/20)), int((display_height/5)*2.6), int(display_width/5), int(display_height/10), blue, cyan)
+        
+        sort_by_gold = True
+        sort_by_time = False
 
         end_time = time.time()
         elapsed_time = int(end_time - start_time + self.saved_elapsed_time)
@@ -1404,20 +1395,34 @@ class Game:
 
             if exit_button.is_pressed(mouse_pos, mouse_pressed):
                 p.quit()
+            
+            if byGold_button.is_pressed(mouse_pos, mouse_pressed):
+                sort_by_gold = True
+                sort_by_time = False
+            
+            if byTime_button.is_pressed(mouse_pos, mouse_pressed):
+                sort_by_time = True
+                sort_by_gold = False
 
             self.screen.fill(lime)
 
             self.draw_text("You have escaped with " + str(self.player_gold) + " gold in", 45, black, int(display_width/2), int((display_height/5)*0.5))
             self.draw_text(time_taken, 40, black, int(display_width/2), int((display_height/5)))
 
-            self.draw_text("Highscores:", 35, black, int(display_width/4), int((display_height/5)*(1.5 + 0.35)))
-            highscores = get_all_highscores_by_gold()
+            self.draw_text("Highscores:", 35, black, int((display_width/5)*3), int((display_height/5)*1.5))
+
+            if sort_by_gold:
+                highscores = get_all_highscores_by_gold()
+            elif sort_by_time:
+                highscores = get_all_highscores_by_time()
             for i, entry in enumerate(highscores):
                 if i > 4:
                     break
-                self.draw_text(str(entry[0]) + " " + str(entry[1]) + " " + str(entry[2]), 35, black, int(display_width/2), int((display_height/5)*(1.5 + 0.35 * (1 + i))))
+                self.draw_text(str(entry[0]) + ": " + str(entry[1]) + " gold in " + str(entry[2]) + " seconds", 28, black, int((display_width/5)*3), int((display_height/5)*(1.5 + 0.35 * (1 + i))))
            
             exit_button.load()
+            byGold_button.load()
+            byTime_button.load()
             
             self.clock.tick(FPS)
             p.display.update()
