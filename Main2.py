@@ -1,13 +1,8 @@
-from json.decoder import JSONDecodeError
-from json.encoder import JSONEncoder
 import pygame as p
 import time
-from math import ceil
 from Settings2 import *
 from Sprites2 import *
 from Database2 import *
-from time import sleep
-from itertools import permutations
 import json
 
 #---------------------------------Game Class---------------------------------
@@ -584,16 +579,16 @@ class Game:
 
                 else:
                     self.write_text("Unable to save!", colour=red)
-            elif "die" in self.choice:
-                self.damage_player(self.player_health)
+            #elif "die" in self.choice:
+            #    self.damage_player(self.player_health)
 
-            elif "win" in self.choice:
-                self.game_complete()
+            #elif "win" in self.choice:
+            #    self.game_complete()
             
-            elif "give" in self.choice:
-                amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
-                self.give_gold_to_player(amount)
-                self.write_text("Received " + str(amount) + " gold. Gold: " + str(self.player_gold), colour=yellow)
+            #elif "give" in self.choice:
+            #    amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
+            #    self.give_gold_to_player(amount)
+            #    self.write_text("Received " + str(amount) + " gold. Gold: " + str(self.player_gold), colour=yellow)
                 
             else:
                 self.write_text("Unknown action.", colour=red)
