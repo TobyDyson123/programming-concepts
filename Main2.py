@@ -10,6 +10,8 @@ class Game:
     #game class constructor
     def __init__(self):
         p.init()
+        p.mixer.init()
+        p.mixer.music.load("background_music.mp3")
         self.screen = p.display.set_mode((display_width,display_height))
         p.display.set_caption(title)
         self.clock = p.time.Clock()
@@ -61,6 +63,7 @@ class Game:
     
     #decision function for managing user inputs
     def decision(self, show_room_info = True):
+
         #self.room_findings indices
         #0) quadrant_sting
         #1) player position in room
@@ -350,7 +353,7 @@ class Game:
                         elif self.target_name == "Leo":
                             self.write_text("Leo warns you that although fighting enemies earns you gold, they can hurt you", colour=yellow)
                         elif self.target_name == "Eddie":
-                            self.write_text("Eddie tells you that he last saw Jerrard in " + rooms[10], colour=yellow)      
+                            self.write_text("Eddie tells you that he last saw Jerrard in " + str(room_names[10]), colour=yellow)      
                     else:
                         self.write_text("There is nobody around to speak to with that name, try speaking with " + self.target_name, colour=red)
                 else:
@@ -912,6 +915,7 @@ class Game:
 
                 if play_button.is_pressed(mouse_pos, mouse_pressed):
                     start_time = time.time()
+                    p.mixer.music.play(-1)
                     self.new(rooms[starting_room])
 
                 if load_button.is_pressed(mouse_pos, mouse_pressed):
@@ -969,6 +973,7 @@ class Game:
                                 ]
                         self.intro = False
                         start_time = time.time()
+                        p.mixer.music.play(-1)
                         self.change_room(rooms[self.current_room], xPos, yPos)
                         self.update()
                         self.decision()
@@ -1326,15 +1331,10 @@ class Game:
     #anagram function which scrambles a word and returns the scrambled word
     def anagram(self, word):
         letters = []
-        scrambled = []
         for letter in word:
             letters.append(letter)
-        for i in range(len(word)):
-            index = random.randint(0, len(letters) - 1)
-            letter = letters[index]
-            del letters[index]
-            scrambled.append(letter)
-        return "".join(scrambled)
+        random.shuffle(letters)
+        return "".join(letters)
 
     #game complete function onces player has escaped dungeon
     def game_complete(self):
