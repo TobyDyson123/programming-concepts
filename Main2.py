@@ -1409,6 +1409,8 @@ class Game:
         self.username_flag = False
         self.password_flag = False
         self.incorrect_flag = False
+        self.max_user_char = 10
+        self.max_pass_char = 10
 
         username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*1.5), int((display_width/5)*3), int(display_height/10), blue, cyan)
         password_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*3), int((display_width/5)*3), int(display_height/10), blue, cyan)
@@ -1436,15 +1438,17 @@ class Game:
                                 pass
                             else:
                                 password_button.msg = password_button.msg[:-1]
+                                self.input_text_password = password_button.msg
                         elif event.key == p.K_SPACE:
                             password_button.msg += " "
                         else:
                             if len(p.key.name(event.key)) == 1:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
-                                    password_button.msg += str(p.key.name(event.key))
-                                    self.input_text_password = password_button.msg
-                                    self.incorrect_flag = False
+                                    if len(self.input_text_password) < self.max_pass_char:
+                                        password_button.msg += str(p.key.name(event.key))
+                                        self.input_text_password = password_button.msg
+                                        self.incorrect_flag = False
                     if self.typing_username:
                         if event.key == p.K_RETURN:
                             self.typing_password = True
@@ -1454,13 +1458,15 @@ class Game:
                                 pass
                             else:
                                 username_button.msg = username_button.msg[:-1]
+                                self.input_text_username = username_button.msg
                         else:
                             if len(p.key.name(event.key)) == 1:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
-                                    username_button.msg += str(p.key.name(event.key))
-                                    self.input_text_username = username_button.msg
-                                    self.incorrect_flag = False
+                                    if len(self.input_text_username) < self.max_user_char:
+                                        username_button.msg += str(p.key.name(event.key))
+                                        self.input_text_username = username_button.msg
+                                        self.incorrect_flag = False
 
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
@@ -1575,6 +1581,8 @@ class Game:
         self.username_flag = False
         self.password_flag = False
         self.exists_flag = False
+        self.max_user_char = 10
+        self.max_pass_char = 10
 
         username_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*1.5), int((display_width/5)*3), int(display_height/10), blue, cyan)
         password_button = Button("", self.font_name, 30, black, int((display_width/5)), int((display_height/5)*3), int((display_width/5)*3), int(display_height/10), blue, cyan)
@@ -1602,14 +1610,16 @@ class Game:
                                 pass
                             else:
                                 password_button.msg = password_button.msg[:-1]
+                                self.input_text_password = password_button.msg
                         elif event.key == p.K_SPACE:
                             password_button.msg += " "
                         else:
                             if len(p.key.name(event.key)) == 1:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
-                                    password_button.msg += str(p.key.name(event.key))
-                                    self.input_text_password = password_button.msg
+                                    if len(self.input_text_password) < self.max_pass_char:
+                                        password_button.msg += str(p.key.name(event.key))
+                                        self.input_text_password = password_button.msg
                     if self.typing_username:
                         if event.key == p.K_RETURN:
                             self.typing_password = True
@@ -1619,13 +1629,15 @@ class Game:
                                 pass
                             else:
                                 username_button.msg = username_button.msg[:-1]
+                                self.input_text_username = username_button.msg
                         else:
                             if len(p.key.name(event.key)) == 1:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57):
-                                    username_button.msg += str(p.key.name(event.key))
-                                    self.input_text_username = username_button.msg
-                                    self.exists_flag = False
+                                    if len(self.input_text_username) < self.max_user_char:
+                                        username_button.msg += str(p.key.name(event.key))
+                                        self.input_text_username = username_button.msg
+                                        self.exists_flag = False
 
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
