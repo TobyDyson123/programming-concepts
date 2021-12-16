@@ -19,10 +19,15 @@ class Game:
         self.font_name = p.font.match_font(font_name)
         self.message_queue = [None, None, None, None, None]
         self.colour_queue = [white, white, white, white, white]
-        self.anagram_words = ["computer", "keyboard", "programming", "internet", "binary", "function",
-                            "generator", "iteration", "hexadecimal", "algorithm", "software", "processor",
-                            "interpreter", "compiler", "assembly", "directory", "python", "system",
-                            "memory", "ascii", "unicode", "denary", "domain", "encryption"]
+        self.anagram_words = {"computer" : "has a CPU", "keyboard" : "an input device", "programming" : "coding", 
+                            "internet" : "connection", "binary" : "base 2", "function" : "can accept parameters",
+                            "generator" : "uses yield in python", "iteration" : "repetition", "hexadecimal" : "base 16", 
+                            "algorithm" : "set of instructions", "software" : "a computer program", "processor" : "clock speed",
+                            "interpreter" : "translates line-by-line", "compiler" : "translates to binary", 
+                            "assembly" : "low-level language", "directory" : "path", "python" : "programming language",
+                            "system" : "collection of components", "memory" : "storage location", 
+                            "ascii" : "character encoding standard", "unicode" : "character encoding standard", 
+                            "denary" : "base 10", "domain" : "targeted subject area", "encryption" : "secure transmittion"}
 
         self.character_spritesheet = Spritesheet("Images/character.png")
         self.terrain_spritesheet = Spritesheet("Images/terrain.png")
@@ -52,7 +57,6 @@ class Game:
         self.right_coords = ()
 
         self.player_inventory = {}
-        self.inventory_button = Button("Inventory", self.font_name, 30, black, 500, display_height - 90, int(display_width/5), int(display_height/10), blue, cyan)
     
     #function for drawing text
     def draw_text(self, text, size, colour, x, y):
@@ -468,10 +472,10 @@ class Game:
                     if self.choice.strip() == "approach":
                         self.choice = self.write_text("Who would you like to approach? You can approach the wizard", True, colour=cyan)
                     if "wizard" in self.choice:
-                        self.word = random.choice(self.anagram_words)
+                        self.word = random.choice(list(self.anagram_words.keys()))
                         self.scrambled_word = self.anagram(self.word)
                         self.write_text("The wizard has offered you gold in exchange for solving this anagram:", colour=yellow)
-                        self.guess = self.write_text(self.scrambled_word, True, colour=yellow)
+                        self.guess = self.write_text(self.scrambled_word + "              hint: " + self.anagram_words[self.word], True, colour=yellow)
                         if self.guess.strip() == self.word:
                             self.gold_to_player = random.randint(3 * len(self.word), 5 * len(self.word))
                             self.give_gold_to_player(self.gold_to_player)
@@ -1058,56 +1062,6 @@ class Game:
             self.player_gold -= gold
         else:
             self.player_gold = 0
-
-    #display map function to show map
-    def display_map(self):
-        self.room_index = 0
-        self.map_box = p.Surface((int((display_width/6)*4),int((display_height/6)*4)))  
-        self.map_box.set_alpha(128)                
-        self.map_box.fill(black)           
-        self.screen.blit(self.map_box, (int(display_width/6),int((display_height/6) - 50)))
-        
-        self.map_rect = p.Rect(int(display_width/6), int(display_height/6) - 50, int((display_width/6) * 4), int((display_height/6) * 4)) 
-        self.mapx = self.map_rect.x + int(self.map_rect.width/12)
-        self.mapy = display_height/6
-        
-        for room in room_names:
-            if room_names[self.current_room] == room:
-                self.draw_text(str(room), 15, red, int(self.mapx), self.mapy)
-            else:
-                self.draw_text(str(room), 15, orange, int(self.mapx), self.mapy)
-
-            try:
-                if room_names[self.current_room + 6] == room and self.down_text == True:
-                    self.draw_text(str(room), 15, cyan, int(self.mapx), self.mapy)
-            except IndexError:
-                pass
-            try:
-                if room_names[self.current_room - 6] == room and self.up_text == True:
-                    self.draw_text(str(room), 15, cyan, int(self.mapx), self.mapy)
-            except IndexError:
-                pass
-            try:
-                if room_names[self.current_room + 1] == room and self.right_text == True:
-                    self.draw_text(str(room), 15, cyan, int(self.mapx), self.mapy)
-            except IndexError:
-                pass
-            try:
-                if room_names[self.current_room - 1] == room and self.left_text == True:
-                    self.draw_text(str(room), 15, cyan, int(self.mapx), self.mapy)
-            except IndexError:
-                pass
-            
-            self.mapx += int(self.map_rect.width/6)
-            self.room_index += 1
-            if self.room_index % 6 == 0 and self.room_index != 0:
-                self.mapx = self.map_rect.x + int(self.map_rect.width/12)
-                self.mapy += display_height/6
-                self.room_index = 0
-
-    #shop function to manage shop
-    def shop(self):
-        pass
 
     #add text function to add user input to screen
     def add_text(self, text, y, colour):

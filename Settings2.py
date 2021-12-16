@@ -51,6 +51,7 @@ tilemap_room1 = [
     "B..................B",
     "BBBBBBBBBBBBBBBBBBBB"]
 
+
 #Room 2 - Courtyard
 tilemap_room2 = [
     "BBBBBBBBBBBBBB=BBBBB",
@@ -63,6 +64,7 @@ tilemap_room2 = [
     "B..................B",
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
+
 
 #Room 3 - 3
 tilemap_room3 = [
@@ -77,6 +79,7 @@ tilemap_room3 = [
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
 
+
 #Room 4 - 4
 tilemap_room4 = [
     "BBBBBBBBBBBBBBBBBBBB",
@@ -89,6 +92,7 @@ tilemap_room4 = [
     "B..W...............B",
     "B..................B",
     "BBBBBBBBBBBBBBBBBBBB"]
+
 
 #Room 5 - 5
 tilemap_room5 = [
@@ -103,6 +107,7 @@ tilemap_room5 = [
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
 
+
 #Room 6 - 6
 tilemap_room6 = [
     "BBBBBBBBBBBBBB*BBBBB",
@@ -115,6 +120,7 @@ tilemap_room6 = [
     "B..............2...B",
     "B..................B",
     "BBBBBBBBBBBBBBBBBBBB"]
+
 
 #Room 7 - Vault
 tilemap_room7 = [
@@ -129,6 +135,7 @@ tilemap_room7 = [
     "B..................B",
     "BBBBBBBBBBBBBBBBBBBB"]
 
+
 #Room 8 - 8
 tilemap_room8 = [
     "BBBBBBBBBBBBBBBBBBBB",
@@ -141,6 +148,7 @@ tilemap_room8 = [
     "B...............C..B",
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
+
 
 #Room 9 - 9
 tilemap_room9 = [
@@ -336,6 +344,7 @@ tilemap_room22 = [
     "B..................B",
     "B..................B",
     "BBBBB*BBBBBBBBBBBBBB"]
+
 
 #Room 23 - 23
 tilemap_room23 = [
