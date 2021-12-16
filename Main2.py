@@ -587,16 +587,16 @@ class Game:
 
                 else:
                     self.write_text("Unable to save!", colour=red)
-            #elif "die" in self.choice:
-            #    self.damage_player(self.player_health)
+            elif "die" in self.choice:
+                self.damage_player(self.player_health)
 
             elif "win" in self.choice:
                 self.game_complete()
             
-            #elif "give" in self.choice:
-            #    amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
-            #    self.give_gold_to_player(amount)
-            #    self.write_text("Received " + str(amount) + " gold. Gold: " + str(self.player_gold), colour=yellow)
+            elif "give" in self.choice:
+                amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
+                self.give_gold_to_player(amount)
+                self.write_text("Received " + str(amount) + " gold. Gold: " + str(self.player_gold), colour=yellow)
                 
             else:
                 self.write_text("Unknown action.", colour=red)
@@ -843,6 +843,7 @@ class Game:
             if event.type == p.QUIT:
                 self.playing = False
                 self.active = False
+                p.quit()
             if event.type == p.KEYDOWN:
                 if event.key == p.K_m:
                     if self.show_map == False:
@@ -1036,6 +1037,7 @@ class Game:
             for event in p.event.get():
                 if event.type == p.QUIT:
                     self.active = False
+                    p.quit()
             
             mouse_pos = p.mouse.get_pos()
             mouse_pressed = p.mouse.get_pressed()
@@ -1057,6 +1059,7 @@ class Game:
                 if event.type == p.QUIT:
                     self.playing = False
                     self.active = False
+                    p.quit()
                 if event.type == p.KEYDOWN:
                     if event.key == p.K_c:
                         pass
@@ -1135,6 +1138,7 @@ class Game:
                         self.typing = False
                         self.playing = False
                         self.active = False
+                        p.quit()
                     if event.type == p.KEYDOWN:
                         if event.key == p.K_RETURN:
                             self.input_text = self.user_input
@@ -1151,7 +1155,7 @@ class Game:
                             if len(p.key.name(event.key)) == 1:
                                 if (ord(p.key.name(event.key)) >= 97 and ord(p.key.name(event.key)) <= 122 or
                                     ord(p.key.name(event.key)) >= 48 and ord(p.key.name(event.key)) <= 57) and (
-                                    len(self.user_input) <= self.maxchar - 10):
+                                    len(self.user_input) <= self.maxchar - 30):
                                     self.user_input += str(p.key.name(event.key))
                         p.draw.rect(self.screen, black, p.Rect(0,display_height - tile_size, display_width, tile_size))
                         self.add_text(self.user_input, 4, self.colour_queue[-1])
