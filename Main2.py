@@ -1726,6 +1726,7 @@ class Game:
                                 mouse_pos = p.mouse.get_pos()
                                 mouse_pressed = p.mouse.get_pressed()
 
+                                self.draw_text("Account successfully registered!", 50, black, int(display_width/2), int((display_height/5)*1.5))
                                 if return_button.is_pressed(mouse_pos, mouse_pressed):
                                     registered = False
                                     self.register = False
