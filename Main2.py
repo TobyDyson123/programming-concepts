@@ -46,6 +46,7 @@ class Game:
         self.current_room = starting_room
         self.show_map = False
         self.saved_elapsed_time = 0
+        self.game_sound = True
 
         self.up_text = False
         self.down_text = False
@@ -890,12 +891,14 @@ class Game:
         global start_time
         
         self.intro = True
+        self.can_click = True
 
         play_button = Button("Start", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
         load_button = Button("Load", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*3), int(display_width/5), int(display_height/10), blue, cyan)
         login_button = Button("Login", self.font_name, 30, black, int((display_width/5)*1), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         register_button = Button("Register", self.font_name, 30, black, int((display_width/5)*3), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         logout_button = Button("Logout", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
+        music_button = Button("Mute Music", self.font_name, 30, black, int((display_width/5)*3.5), int((display_height/20)), int(display_width/4), int(display_height/10), blue, cyan)
 
         while self.intro:
             for event in p.event.get():
@@ -910,6 +913,22 @@ class Game:
 
             self.screen.fill(yellow)
             self.draw_text(title, 100, black, int(display_width/2), int(display_height/5))
+            music_button.load()
+
+            if not mouse_pressed[0]:
+                self.can_click = True
+
+            if self.game_sound:
+                music_button.msg = "Mute Music"
+            elif not self.game_sound:
+                music_button.msg = "Unmute Music"
+
+            if music_button.is_pressed(mouse_pos, mouse_pressed) and self.can_click:
+                if self.game_sound:
+                    self.game_sound = False
+                elif not self.game_sound:
+                    self.game_sound = True
+                self.can_click = False
             
             if self.player_name:
                 play_button.load()
@@ -919,7 +938,8 @@ class Game:
 
                 if play_button.is_pressed(mouse_pos, mouse_pressed):
                     start_time = time.time()
-                    p.mixer.music.play(-1)
+                    if self.game_sound:
+                        p.mixer.music.play(-1)
                     self.new(rooms[starting_room])
 
                 if load_button.is_pressed(mouse_pos, mouse_pressed):
@@ -977,7 +997,8 @@ class Game:
                                 ]
                         self.intro = False
                         start_time = time.time()
-                        p.mixer.music.play(-1)
+                        if self.game_sound:
+                            p.mixer.music.play(-1)
                         self.change_room(rooms[self.current_room], xPos, yPos)
                         self.update()
                         self.decision()
