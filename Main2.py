@@ -29,14 +29,14 @@ class Game:
                             "ascii" : "character encoding standard", "unicode" : "character encoding standard", 
                             "denary" : "base 10", "domain" : "targeted subject area", "encryption" : "secure transmittion"}
 
-        self.character_spritesheet = Spritesheet("Images/character.png")
-        self.terrain_spritesheet = Spritesheet("Images/terrain.png")
-        self.enemies_spritesheet = Spritesheet("Images/enemy.png")
-        self.coin_spritesheet = Spritesheet("Images/coin.png")
+        self.character_spritesheet = Spritesheet("Images/character.png") #img (2020) img [Online]. Available at https://www.mediafire.com/file/024qld0tru7azh9/img.zip/file (Accessed 16 December 2021).
+        self.terrain_spritesheet = Spritesheet("Images/terrain.png") #img (2020) img [Online]. Available at https://www.mediafire.com/file/024qld0tru7azh9/img.zip/file (Accessed 16 December 2021).
+        self.enemies_spritesheet = Spritesheet("Images/enemy.png") #img (2020) img [Online]. Available at https://www.mediafire.com/file/024qld0tru7azh9/img.zip/file (Accessed 16 December 2021).
+        self.coin_spritesheet = Spritesheet("Images/coin.png") #vhv.rshttps://www.vhv.rs/viewpic/hbibibJ_coins-clipart-sprite-coin-sprite-sheet-png-transparent/ (2019) Coins Clipart Sprite - Coin Sprite Sheet Png, Transparent Png - vhv [Online]. (Accessed 16 December 2021).
         self.wizard_spritesheet = Spritesheet("Images/wizard.png")
         self.chest_spritesheet = Spritesheet("Images/chest.png")
-        self.npc_spritesheet = Spritesheet("Images/npcs.png")
-        self.door_spritesheet = Spritesheet("Images/doors.png")
+        self.npc_spritesheet = Spritesheet("Images/npcs.png") #img (2020) img [Online]. Available at https://www.mediafire.com/file/024qld0tru7azh9/img.zip/file (Accessed 16 December 2021).
+        self.door_spritesheet = Spritesheet("Images/doors.png") #Pixilarthttps://www.pixilart.com/draw/pixel-door-0fc84f0c3d4c39f (2021) Pixilart [Online]. (Accessed 16 December 2021).
 
         self.player_health = player_health
         self.player_gold = 0
