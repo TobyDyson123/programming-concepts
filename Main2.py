@@ -590,8 +590,8 @@ class Game:
             #elif "die" in self.choice:
             #    self.damage_player(self.player_health)
 
-            #elif "win" in self.choice:
-            #    self.game_complete()
+            elif "win" in self.choice:
+                self.game_complete()
             
             #elif "give" in self.choice:
             #    amount = int(''.join(filter(lambda x : x.isdigit(), self.choice)))
