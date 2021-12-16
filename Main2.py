@@ -1026,6 +1026,7 @@ class Game:
 
     #game over screen function        
     def game_over(self):
+        p.mixer.music.stop()
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
 
         for sprite in self.all_sprites:
@@ -1313,6 +1314,7 @@ class Game:
 
     #game complete function onces player has escaped dungeon
     def game_complete(self):
+        p.mixer.music.stop()
         global end_time
         exit_button = Button("Exit", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         byGold_button = Button("Sort by Gold", self.font_name, 30, black, int((display_width/20)), int((display_height/5)*2), int(display_width/5), int(display_height/10), blue, cyan)
