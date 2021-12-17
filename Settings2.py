@@ -17,7 +17,7 @@ lime = (191,255,0)
 display_width = 640
 display_height = 480
 tile_size = 32
-title = "Title"
+title = "Dungeon Escape"
 FPS = 60
 font_name = "ariel"
 

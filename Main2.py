@@ -899,7 +899,7 @@ class Game:
         login_button = Button("Login", self.font_name, 30, black, int((display_width/5)*1), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         register_button = Button("Register", self.font_name, 30, black, int((display_width/5)*3), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
         logout_button = Button("Logout", self.font_name, 30, black, int((display_width/5)*2), int((display_height/5)*4), int(display_width/5), int(display_height/10), blue, cyan)
-        music_button = Button("Mute Music", self.font_name, 30, black, int((display_width/5)*3.5), int((display_height/20)), int(display_width/4), int(display_height/10), blue, cyan)
+        music_button = Button("Mute Music", self.font_name, 30, black, int((display_width/5)*3.5), int((10)), int(display_width/4), int(display_height/10), blue, cyan)
 
         while self.intro:
             for event in p.event.get():
