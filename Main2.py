@@ -1164,7 +1164,7 @@ class Game:
     #function to scan room and determine what is within the quadrant the user is in
     def scan_room(self):
         #self.room_findings indices
-        #0) quadrant_sting
+        #0) quadrant_string
         #1) player position in room
         #2) where player can move
         #3) list of items in area
